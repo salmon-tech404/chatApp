@@ -1,0 +1,75 @@
+/* ── Root ───────────────────────────────────────────────────────────────────── */
+.root {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0d2137 0%, #0a3d4a 48%, #083d38 100%);
+}
+
+/* ── Mesh glow layers ────────────────────────────────────────────────────────── */
+.meshTop {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  top: -300px;
+  left: -200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(45, 212, 191, 0.09) 0%,
+    transparent 68%
+  );
+  filter: blur(48px);
+  pointer-events: none;
+}
+
+.meshBottom {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  bottom: -260px;
+  right: -120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(14, 165, 233, 0.07) 0%,
+    transparent 68%
+  );
+  filter: blur(48px);
+  pointer-events: none;
+}
+
+/* ── Floating bubbles ────────────────────────────────────────────────────────── */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(3px);
+  pointer-events: none;
+  animation: floatBubble 7s ease-in-out infinite;
+}
+
+.bubble1 { width: 380px; height: 380px; top: -110px; left: -120px; opacity: 0.55; animation-delay: 0s;    }
+.bubble2 { width: 220px; height: 220px; top:  -55px; left:  62%;   opacity: 0.35; animation-delay: 1.8s;  }
+.bubble3 { width: 160px; height: 160px; top:   58%;  left:  82%;   opacity: 0.25; animation-delay: 3.2s;  }
+.bubble4 { width: 280px; height: 280px; top:   62%;  left:  -60px; opacity: 0.30; animation-delay: 2.1s;  }
+.bubble5 { width: 130px; height: 130px; top:   12%;  left:  74%;   opacity: 0.20; animation-delay: 0.9s;  }
+
+@keyframes floatBubble {
+  0%, 100% { transform: translateY(0px)   scale(1);    }
+  50%       { transform: translateY(-22px) scale(1.04); }
+}
+
+/* ── Content layer (sits above decorations) ──────────────────────────────────── */
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
