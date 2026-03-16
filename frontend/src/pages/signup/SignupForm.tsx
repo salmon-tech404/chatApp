@@ -75,22 +75,19 @@ export default function SignupForm() {
         style={{ display: "flex", flexDirection: "column", gap: 14 }}
       >
         {/* Họ và Tên — 2 cột cạnh nhau */}
-        <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}
-        >
-          <AuthInputField
-            icon={User}
-            placeholder='Họ'
-            error={errors.firstname?.message}
-            {...register("firstname")}
-          />
-          <AuthInputField
-            icon={User}
-            placeholder='Tên'
-            error={errors.lastname?.message}
-            {...register("lastname")}
-          />
-        </div>
+
+        <AuthInputField
+          icon={User}
+          placeholder='Họ'
+          error={errors.firstname?.message}
+          {...register("firstname")}
+        />
+        <AuthInputField
+          icon={User}
+          placeholder='Tên'
+          error={errors.lastname?.message}
+          {...register("lastname")}
+        />
 
         {/* Username */}
         <AuthInputField
