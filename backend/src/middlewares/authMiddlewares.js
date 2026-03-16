@@ -15,25 +15,21 @@ export const protectedRoute = async (req, res, next) => {
       return res.status(401).json({ message: "Không có token" });
     }
     // tìm user tương ứng với token
-    jwt.verify(
-      token,
-      process.env.ACCESS_TOKEN_SECRET,
-      async (err, decodedUser) => {
-        if (err) {
-          return res
-            .status(401)
-            .json({ message: "Access token hết hạn hoặc không đúng" });
-        }
-        const user = await User.findById(decodedUser.userId).select(
-          "-hashedPassword",
-        );
-        if (!user) {
-          return res.status(401).json({ message: "Người dùng không tồn tại" });
-        }
-        req.user = user; //gắn thêm dữ liệu vào req object để truyền xuống middleware/controller tiếp theo!
-        next();
-      },
-    );
+    jwt.verify(token, process.env.SECRET_TOKEN, async (err, decodedUser) => {
+      if (err) {
+        return res
+          .status(401)
+          .json({ message: "Access token hết hạn hoặc không đúng" });
+      }
+      const user = await User.findById(decodedUser.userId).select(
+        "-hashedPassword",
+      );
+      if (!user) {
+        return res.status(401).json({ message: "Người dùng không tồn tại" });
+      }
+      req.user = user; //gắn thêm dữ liệu vào req object để truyền xuống middleware/controller tiếp theo!
+      next();
+    });
   } catch (error) {
     console.error("Lỗi khi xác thực JWT token", error);
     return res.status(401).json({ message: "Lỗi hệ thống" });

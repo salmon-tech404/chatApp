@@ -3,8 +3,7 @@ import jwt from "jsonwebtoken"; //tạo jwt token
 import User from "../models/User.js";
 import crypto from "crypto"; //tạo random token
 import Session from "../models/Session.js";
-const REFRESH_TOKEN_TTL = 10 * 1000;
-// 14 * 24 * 60 * 60 * 1000;
+const REFRESH_TOKEN_TTL = 14 * 24 * 60 * 60 * 1000;
 
 export const signUp = async (req, res) => {
   try {

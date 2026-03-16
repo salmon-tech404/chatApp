@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import { connectDB } from "./libs/moongoDB.js";
 import authRoutes from "./routes/authRoutes.js";
 import cookieParser from "cookie-parser";
@@ -10,6 +11,14 @@ dotenv.config();
 
 const app = express();
 connectDB();
+
+// ✅ CORS — phải đặt TRƯỚC tất cả routes
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true, // cho phép gửi cookie từ client
+  }),
+);
 const SERVER_PORT = process.env.SERVER_PORT;
 app.use(express.json());
 app.use(cookieParser());
