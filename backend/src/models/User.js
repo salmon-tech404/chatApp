@@ -4,31 +4,31 @@ const userShema = new mongoose.Schema(
   {
     username: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
       trim: true,
       lowercase: true,
     },
     hashedPassword: {
       type: String,
-      require: true,
+      required: true,
     },
     email: {
       type: String,
-      require: true,
+      required: true,
       lowercase: true,
       lowercase: true,
       trim: true,
     },
     displayName: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
     },
-    avataUrl: {
+    avatarUrl: {
       type: String, //Link CND để hiển thị hình
     },
-    avataId: {
+    avatarId: {
       type: String, //Cloudinary public_id để xóa hình
     },
     bio: {
