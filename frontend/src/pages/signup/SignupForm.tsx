@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { z } from "zod"; //Schema Validation
 import { useNavigate, Link } from "react-router";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import AuthInputField from "@/components/common/AuthInputField";
 
+// Tạo schema validation cho form đăng ký bằng zod
 const SignupSchema = z.object({
   firstname: z.string().min(1, "Vui lòng nhập họ"),
   lastname: z.string().min(1, "Vui lòng nhập tên"),
@@ -18,8 +19,10 @@ const SignupSchema = z.object({
     .min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
 });
 
+// Định nghĩa kiểu dữ liệu cho form dựa trên schema
 type SignupFormData = z.infer<typeof SignupSchema>;
 
+// Component chính của form đăng ký
 export default function SignupForm() {
   const navigate = useNavigate();
 
@@ -28,6 +31,7 @@ export default function SignupForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({
+    //useForm công cụ giúp bạn xử lý input, validate, submit, lỗi form mà không phải tự viết logic thủ công
     resolver: zodResolver(SignupSchema),
   });
 

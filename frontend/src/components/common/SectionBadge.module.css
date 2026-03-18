@@ -1,0 +1,34 @@
+/* src/components/common/SectionBadge.module.css */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45, 212, 191, 0.10);
+  border: 1px solid rgba(45, 212, 191, 0.25);
+  border-radius: var(--radius-full);
+  padding: 6px 16px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-brand-teal);
+  box-shadow: 0 0 8px var(--color-brand-teal);
+  animation: pulseDot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(45, 212, 191, 0); }
+}
+
+.label {
+  color: var(--color-brand-teal);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  letter-spacing: 0.4px;
+}

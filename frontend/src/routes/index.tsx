@@ -10,19 +10,19 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
+import AboutPage from "@/pages/AboutPage";
 // import ChatPage   from "@/pages/ChatPage"; // Sẽ làm sau
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Trang chủ */}
+        {/* Public page */}
         <Route path='/' element={<HomePage />} />
+        <Route path='/about' element={<AboutPage />} />
 
-        {/* Trang đăng nhập */}
+        {/* Auth pages */}
         <Route path='/login' element={<LoginPage />} />
-
-        {/* Trang đăng ký */}
         <Route path='/signup' element={<SignupPage />} />
 
         {/* Trang chat — sẽ làm sau */}

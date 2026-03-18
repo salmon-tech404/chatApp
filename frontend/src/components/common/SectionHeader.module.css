@@ -1,0 +1,44 @@
+/* src/components/common/SectionHeader.module.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Alignment variants */
+.wrapper[data-align="center"] {
+  align-items: center;
+  text-align: center;
+}
+
+.wrapper[data-align="left"] {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.badgeWrapper {
+  /* wrapper để badge không bị stretch full-width khi align="left" */
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+  max-width: 560px;
+}
+
+/* Khi center thì subtitle căn giữa */
+.wrapper[data-align="center"] .subtitle {
+  text-align: center;
+}

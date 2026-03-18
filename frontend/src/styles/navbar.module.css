@@ -1,3 +1,5 @@
+/* src/styles/navbar.module.css */
+
 .navbar {
   display: flex;
   align-items: center;
@@ -12,7 +14,7 @@
 .navLinks {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .navLink {
@@ -20,9 +22,10 @@
   border: none;
   color: rgba(255, 255, 255, 0.55);
   font-size: 14px;
+  font-family: var(--font-body);
   cursor: pointer;
   padding: 8px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   transition:
     color 0.2s,
     background 0.2s;
@@ -33,8 +36,25 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* Active state — trang hiện tại */
+.navLinkActive {
+  color: var(--color-brand-teal) !important;
+  background: rgba(45, 212, 191, 0.08) !important;
+}
+
 .navActions {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 24px;
+  }
+
+  .navLinks {
+    display: none; /* ẩn trên mobile, sẽ làm hamburger menu sau */
+  }
 }
