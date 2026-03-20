@@ -22,17 +22,17 @@ export default function AppLogo({ size = "md", asLink = false }: AppLogoProps) {
         className={styles.iconBox}
         style={{ width: s.icon, height: s.icon, borderRadius: s.icon * 0.26 }}
       >
-        <MessageCircle size={s.iconSize} color="#fff" />
+        <MessageCircle size={s.iconSize} color='#fff' />
       </div>
       <span className={styles.name} style={{ fontSize: s.font }}>
-        ChatApp
+        Halo App
       </span>
     </div>
   );
 
   if (asLink) {
     return (
-      <Link to="/" className={styles.link}>
+      <Link to='/' className={styles.link}>
         {inner}
       </Link>
     );
