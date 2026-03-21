@@ -11,7 +11,8 @@ import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
 import AboutPage from "@/pages/AboutPage";
-// import ChatPage   from "@/pages/ChatPage"; // Sẽ làm sau
+import ContactPage from "@/pages/ContactPage";
+import ChatPage from "@/pages/ChatPage";
 
 export default function AppRouter() {
   return (
@@ -20,13 +21,14 @@ export default function AppRouter() {
         {/* Public page */}
         <Route path='/' element={<HomePage />} />
         <Route path='/about' element={<AboutPage />} />
+        <Route path='/contact' element={<ContactPage />} />
 
         {/* Auth pages */}
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
 
         {/* Trang chat — sẽ làm sau */}
-        {/* <Route path="/chat" element={<ChatPage />} /> */}
+        <Route path='/chat' element={<ChatPage />} />
 
         {/* Mọi URL không tồn tại → về trang chủ */}
         <Route path='*' element={<Navigate to='/' replace />} />

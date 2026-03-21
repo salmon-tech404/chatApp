@@ -1,0 +1,634 @@
+/* src/styles/contact.module.css */
+
+/* ── Page layout ─────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Hero Section ────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 96px 48px 72px;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.heroGlow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(45, 212, 191, 0.07) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.heroBadge {
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s ease both;
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6vw, 68px);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+  max-width: 720px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+.heroSubtitle {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  max-width: 520px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+/* ── Main Layout: Form + Info ────────────────────────────────────────────── */
+.mainSection {
+  padding: 64px 48px 96px;
+  position: relative;
+  z-index: 5;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* ── Contact Info (Left) ─────────────────────────────────────────────────── */
+.infoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.infoHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.infoTitle {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+}
+
+.infoSubtitle {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+}
+
+/* Contact method cards */
+.contactMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+
+.contactCard:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(45, 212, 191, 0.25);
+  transform: translateX(4px);
+}
+
+.contactCardIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contactCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contactCardLabel {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-text-muted);
+}
+
+.contactCardValue {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Social links */
+.socialSection {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.socialLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--color-text-muted);
+}
+
+.socialLinks {
+  display: flex;
+  gap: 10px;
+}
+
+.socialBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  color: var(--color-text-secondary);
+}
+
+.socialBtn:hover {
+  background: rgba(45, 212, 191, 0.1);
+  border-color: rgba(45, 212, 191, 0.3);
+  color: var(--color-brand-teal);
+  transform: translateY(-2px);
+}
+
+/* Hours */
+.hoursCard {
+  padding: 22px 24px;
+  background: rgba(45, 212, 191, 0.05);
+  border: 1px solid rgba(45, 212, 191, 0.15);
+  border-radius: var(--radius-lg);
+}
+
+.hoursTitle {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-brand-teal);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.hoursRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.hoursRow:last-child {
+  border-bottom: none;
+}
+
+.hoursDay {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.hoursTime {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+/* ── Contact Form (Right) ────────────────────────────────────────────────── */
+.formPanel {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-xl);
+  padding: 40px 36px;
+  backdrop-filter: blur(12px);
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.formTitle {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+}
+
+.formSubtitle {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 560px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.formInput {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-family: var(--font-body);
+  outline: none;
+  transition: background 0.2s, border-color 0.2s;
+  width: 100%;
+}
+
+.formInput:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(45, 212, 191, 0.45);
+}
+
+.formInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+.formTextarea {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-family: var(--font-body);
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+  transition: background 0.2s, border-color 0.2s;
+  width: 100%;
+  line-height: 1.6;
+}
+
+.formTextarea:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(45, 212, 191, 0.45);
+}
+
+.formTextarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Topic selector */
+.topicGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.topicBtn {
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.topicBtn:hover {
+  background: rgba(45, 212, 191, 0.08);
+  border-color: rgba(45, 212, 191, 0.3);
+  color: var(--color-brand-teal);
+}
+
+.topicBtnActive {
+  background: rgba(45, 212, 191, 0.12);
+  border-color: rgba(45, 212, 191, 0.4);
+  color: var(--color-brand-teal);
+}
+
+.formError {
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.submitBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-brand-gradient);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 14px 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: var(--shadow-brand);
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.submitBtn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.submitBtn:active {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success state */
+.successBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: 32px 0;
+  animation: fadeUp 0.5s ease both;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successTitle {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.successText {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  max-width: 300px;
+}
+
+/* ── FAQ Section ─────────────────────────────────────────────────────────── */
+.faqSection {
+  padding: 80px 48px;
+  position: relative;
+  z-index: 5;
+}
+
+.faqSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.015);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.faqHeader {
+  margin-bottom: 48px;
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.faqItem {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  transition: background 0.2s, border-color 0.2s;
+  cursor: default;
+}
+
+.faqItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(45, 212, 191, 0.2);
+}
+
+.faqQuestion {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.faqAnswer {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+}
+
+/* ── CTA Banner ──────────────────────────────────────────────────────────── */
+.ctaBanner {
+  margin: 0 48px 80px;
+  padding: 56px 48px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.ctaBanner::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  right: -100px;
+  top: -150px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(45, 212, 191, 0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .ctaBanner {
+    flex-direction: column;
+    text-align: center;
+    margin: 0 24px 60px;
+    padding: 40px 28px;
+  }
+}
+
+.ctaText {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ctaTitle {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.5px;
+}
+
+.ctaSubtitle {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.ctaActions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* ── Animations ──────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive padding */
+@media (max-width: 768px) {
+  .hero,
+  .mainSection,
+  .faqSection {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .hero {
+    padding-top: 64px;
+    padding-bottom: 48px;
+  }
+
+  .formPanel {
+    padding: 28px 22px;
+  }
+}

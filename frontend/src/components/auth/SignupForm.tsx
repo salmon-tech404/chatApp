@@ -9,8 +9,14 @@ import AuthInputField from "@/components/common/AuthInputField";
 
 // Tạo schema validation cho form đăng ký bằng zod
 const SignupSchema = z.object({
-  firstname: z.string().min(1, "Vui lòng nhập họ"),
-  lastname: z.string().min(1, "Vui lòng nhập tên"),
+  firstname: z
+    .string()
+    .regex(/^[a-zA-ZÀ-ỹ\s]+$/, "Họ chỉ được chứa ký tự chữ và khoảng trắng")
+    .min(1, "Vui lòng nhập họ"),
+  lastname: z
+    .string()
+    .regex(/^[a-zA-ZÀ-ỹ\s]+$/, "Tên chỉ được chứa ký tự chữ và khoảng trắng")
+    .min(1, "Vui lòng nhập tên"),
   username: z.string().min(1, "Vui lòng nhập username"),
   email: z.string().min(1, "Vui lòng nhập email").email("Email không hợp lệ"),
   password: z

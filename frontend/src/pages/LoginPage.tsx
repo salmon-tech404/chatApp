@@ -1,7 +1,7 @@
 import PageWrapper from "@/components/layout/PageWrapper";
 import Navbar from "@/components/layout/NavBar";
 import AuthLayout from "@/components/layout/AuthLayout";
-import LoginForm from "@/pages/login/LoginForm";
+import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
   return (

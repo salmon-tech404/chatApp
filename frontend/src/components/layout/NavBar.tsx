@@ -4,7 +4,7 @@ import GradientButton from "@/components/common/GradientButton.tsx";
 import styles from "@/styles/navbar.module.css";
 
 const NAV_LINKS = [
-  { name: "Tính năng", path: "/" },
+  { name: "Trang chủ", path: "/" },
   { name: "Về chúng tôi", path: "/about" },
   { name: "Liên hệ", path: "/contact" },
 ];

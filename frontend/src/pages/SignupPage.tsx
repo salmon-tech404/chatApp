@@ -1,7 +1,7 @@
 import PageWrapper from "@/components/layout/PageWrapper";
 import Navbar from "@/components/layout/NavBar";
 import AuthLayout from "@/components/layout/AuthLayout";
-import SignupForm from "@/pages/signup/SignupForm";
+import SignupForm from "@/components/auth/SignupForm";
 
 export default function SignupPage() {
   return (
