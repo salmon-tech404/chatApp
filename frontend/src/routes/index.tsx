@@ -13,6 +13,7 @@ import SignupPage from "@/pages/SignupPage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import ChatPage from "@/pages/ChatPage";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export default function AppRouter() {
   return (
@@ -28,7 +29,9 @@ export default function AppRouter() {
         <Route path='/signup' element={<SignupPage />} />
 
         {/* Trang chat — sẽ làm sau */}
-        <Route path='/chat' element={<ChatPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path='/chat' element={<ChatPage />} />
+        </Route>
 
         {/* Mọi URL không tồn tại → về trang chủ */}
         <Route path='*' element={<Navigate to='/' replace />} />

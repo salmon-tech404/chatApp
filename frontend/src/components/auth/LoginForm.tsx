@@ -3,9 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate, Link } from "react-router";
 import { Mail, Lock, ArrowRight } from "lucide-react";
-import { toast } from "sonner";
-import axios from "axios";
 import AuthInputField from "@/components/common/AuthInputField";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Vui lòng nhập username"),
@@ -16,31 +15,24 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  // Lấy Signin & Loading từ Store
+  const { signIn, loading } = useAuthStore();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const res = await axios.post(
-        "http://localhost:5001/api/auth/signin",
-        data,
-        { withCredentials: true },
-      );
-      localStorage.setItem("accessToken", res.data.accessToken);
-      toast.success("Đăng nhập thành công! 🎉");
+      await signIn(data.username, data.password);
+      // Điều hướng về trang chủ sau khi đăng nhập thành công
       navigate("/chat");
-    } catch (err: unknown) {
-      const message =
-        axios.isAxiosError(err) && err.response?.data?.message
-          ? err.response.data.message
-          : "Đăng nhập thất bại, thử lại nhé!";
-      toast.error(message);
+    } catch {
+      // Lỗi đã được xử lý và hiển thị trong Store, không cần làm gì thêm ở đây
     }
   };
 
@@ -111,13 +103,13 @@ export default function LoginForm() {
 
         <button
           type='submit'
-          disabled={isSubmitting}
+          disabled={loading}
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
-            background: isSubmitting
+            background: loading
               ? "rgba(45,212,191,0.4)"
               : "linear-gradient(135deg, #2dd4bf, #0ea5e9)",
             border: "none",
@@ -127,24 +119,22 @@ export default function LoginForm() {
             fontSize: 15,
             fontWeight: 600,
             fontFamily: "var(--font-body)",
-            cursor: isSubmitting ? "not-allowed" : "pointer",
+            cursor: loading ? "not-allowed" : "pointer",
             marginTop: 4,
             boxShadow: "0 4px 20px rgba(45,212,191,0.35)",
             transition: "opacity 0.2s, transform 0.15s",
           }}
         >
-          {isSubmitting ? (
+          {loading ? (
             "Đang đăng nhập..."
           ) : (
             <>
-              {" "}
-              Đăng nhập <ArrowRight size={16} />{" "}
+              Đăng nhập <ArrowRight size={16} />
             </>
           )}
         </button>
       </form>
 
-      {/* Divider */}
       <div
         style={{
           display: "flex",
