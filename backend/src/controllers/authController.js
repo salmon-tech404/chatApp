@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"; //tạo jwt token
 import User from "../models/User.js";
 import crypto from "crypto"; //tạo random token
 import Session from "../models/Session.js";
-const REFRESH_TOKEN_TTL = 14 * 24 * 60 * 60 * 1000;
+const REFRESH_TOKEN_TTL = 60 * 60 * 1000; // 1 giờ, thời gian sống của refresh token, sau thời gian này sẽ hết hạn và không thể sử dụng để tạo access token mới nữa
 
 export const signUp = async (req, res) => {
   try {

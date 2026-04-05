@@ -1,19 +1,28 @@
 // frontend/src/components/auth/ProtectedRoute.tsx
 import { useAuthStore } from "@/store/useAuthStore";
+
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
 
 const ProtectedRoute = () => {
-  const { accessToken, loading } = useAuthStore();
+  const { accessToken, loading, refresh, signOut } = useAuthStore();
   const [starting, setStarting] = useState(true);
 
   useEffect(() => {
-    // Khôi phục token từ localStorage vào store khi app khởi động
-    const savedToken = localStorage.getItem("accessToken");
-    if (savedToken && !accessToken) {
-      useAuthStore.setState({ accessToken: savedToken });
-    }
-    setStarting(false);
+    const bootstrap = async () => {
+      const savedToken = localStorage.getItem("accessToken");
+      if (savedToken && !accessToken) {
+        // Thêm dòng này: gọi lên backend để verify
+        // → backend mới có cơ hội check session.expiresAt
+        try {
+          await refresh();
+        } catch {
+          await signOut();
+        }
+      }
+      setStarting(false);
+    };
+    bootstrap();
   }, []);
 
   // Đang khởi động hoặc đang loading → chưa render gì
