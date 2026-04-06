@@ -15,7 +15,7 @@ const ConversationSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: ["direct", "group"],
-      required: true,
+      default: "direct",
     },
 
     // Tên nhóm
