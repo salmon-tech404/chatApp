@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import { protectedRoute } from "./middlewares/authMiddlewares.js";
+import friendRoutes from "./routes/friendRoutes.js";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use(protectedRoute); // áp dụng middleware bảo vệ cho tất cả routes sau nó
 app.use("/api/users", userRoutes);
 app.use("/api/conversations", conversationRoutes);
+app.use("/api/friends", friendRoutes);
 
 app.listen(SERVER_PORT, () => {
   console.log(`🚀 Server is running on port ${SERVER_PORT} 💓`);
