@@ -36,8 +36,6 @@ const FEATURES = [
   { icon: MessageCircle, title: "99.9% Uptime", desc: "Luôn sẵn sàng 24/7" },
 ];
 
-const NAV_LINKS = ["Tính năng", "Về chúng tôi", "Liên hệ"];
-
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function MockupAvatar() {

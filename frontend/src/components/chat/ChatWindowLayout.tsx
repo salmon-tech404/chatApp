@@ -1,7 +1,5 @@
-import React from "react";
-
 const ChatWindowLayout = () => {
-  return <div></div>;
+  return <div>ChatWindowLayout</div>;
 };
 
 export default ChatWindowLayout;
