@@ -86,3 +86,17 @@
     @apply font-sans;
   }
 }
+
+[data-slot="sidebar"] {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-sidebar="menu-button"] {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+[data-sidebar="menu-button"]:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #000000;
+}

@@ -1,15 +1,17 @@
-import ChatWindowLayout from "@/components/chat/ChatWindowLayout";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import ChatWindowLayout from "@/components/chat/ChatWindowLayout";
 
 const ChatPage = () => {
   return (
-    <SidebarProvider>
-      <div className='flex h-screen'>
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      <SidebarProvider>
         <AppSidebar />
-        <ChatWindowLayout />
-      </div>
-    </SidebarProvider>
+        <SidebarInset>
+          <ChatWindowLayout />
+        </SidebarInset>
+      </SidebarProvider>
+    </div>
   );
 };
 
