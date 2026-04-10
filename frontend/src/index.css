@@ -8,36 +8,37 @@
 
 @layer base {
   :root {
-    /* ── Shadcn/Tailwind required ──────────────────── */
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    /* ── Shadcn/ Tailwind required ──────────────────── */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
     --radius: 0.625rem;
 
-    /* ── Sidebar (dark theme) ──────────────────────── */
-    --sidebar: oklch(0.13 0.02 240);
-    --sidebar-foreground: oklch(0.9 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(1 0 0 / 8%);
-    --sidebar-accent-foreground: oklch(1 0 0);
-    --sidebar-border: oklch(1 0 0 / 8%);
-    --sidebar-ring: oklch(0.708 0 0);
+    /* ── Sidebar (default theme) ──────────────────────── */
+    --sidebar: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 206 61% 11%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* ── Brand ─────────────────────────────────────── */
     --color-brand-teal: #2dd4bf;
@@ -95,38 +96,68 @@
   }
 
   /* ── Scrollbar ─────────────────────────────────── */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
   ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.12);
     border-radius: 4px;
   }
 
   /* ── Placeholder ───────────────────────────────── */
-  ::placeholder { color: var(--color-text-muted) !important; }
+  ::placeholder {
+    color: var(--color-text-muted) !important;
+  }
 }
 
 /* ── Animations ──────────────────────────────────── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes floatBubble {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50%       { transform: translateY(-20px) scale(1.03); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.03);
+  }
 }
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
-  50%       { box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(45, 212, 191, 0);
+  }
 }
 
 /* ── Utility classes ─────────────────────────────── */
-.animate-fade-up { animation: fadeUp 0.6s ease both; }
-.animate-fade-in { animation: fadeIn 0.4s ease both; }
+.animate-fade-up {
+  animation: fadeUp 0.6s ease both;
+}
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
 .gradient-text {
   background: var(--color-brand-gradient);
   -webkit-background-clip: text;

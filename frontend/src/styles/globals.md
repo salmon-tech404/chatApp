@@ -1,0 +1,169 @@
+/_ @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
+/_ ── CSS Variables ─────────────────────────────────────────────────────────── _/
+:root {
+/_ Brand \*/
+--color-brand-teal: #2dd4bf;
+--color-brand-sky: #0ea5e9;
+--color-brand-gradient: linear-gradient(135deg, #2dd4bf, #0ea5e9);
+
+/_ Background layers _/
+--color-bg-base: #0b1e2d;
+--color-bg-deep: #0a1628;
+--color-bg-surface: rgba(255, 255, 255, 0.05);
+--color-bg-surface-hover: rgba(255, 255, 255, 0.09);
+--color-bg-glass: rgba(255, 255, 255, 0.07);
+
+/_ Border _/
+--color-border: rgba(255, 255, 255, 0.1);
+--color-border-strong: rgba(255, 255, 255, 0.18);
+--color-border-brand: rgba(45, 212, 191, 0.35);
+
+/_ Text _/
+--color-text-primary: #ffffff;
+--color-text-secondary: rgba(255, 255, 255, 0.55);
+--color-text-muted: rgba(255, 255, 255, 0.3);
+--color-text-brand: #2dd4bf;
+
+/_ Status _/
+--color-online: #22c55e;
+--color-danger: #f87171;
+
+/_ Typography _/
+--font-display: "Playfair Display", serif;
+--font-body: "Plus Jakarta Sans", sans-serif;
+/_ --font-display:
+-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+Arial, sans-serif;
+--font-body:
+-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial,
+sans-serif; _/
+
+/_ Spacing _/
+--radius-sm: 8px;
+--radius-md: 12px;
+--radius-lg: 18px;
+--radius-xl: 24px;
+--radius-full: 9999px;
+
+/_ Shadow _/
+--shadow-brand: 0 4px 20px rgba(45, 212, 191, 0.3);
+--shadow-card: 0 20px 60px rgba(0, 0, 0, 0.35);
+--shadow-glow-sm: 0 0 20px rgba(45, 212, 191, 0.15);
+}
+
+/_ ── Reset ──────────────────────────────────────────────────────────────────── _/
+_,
+_::before,
+\*::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+html,
+body,
+#root {
+height: 100%;
+}
+
+body {
+font-family: var(--font-body);
+background: var(--color-bg-base);
+color: var(--color-text-primary);
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+overflow-x: hidden;
+}
+
+/_ ── Scrollbar ──────────────────────────────────────────────────────────────── _/
+::-webkit-scrollbar {
+width: 4px;
+}
+::-webkit-scrollbar-track {
+background: transparent;
+}
+::-webkit-scrollbar-thumb {
+background: rgba(255, 255, 255, 0.12);
+border-radius: 4px;
+}
+
+/_ ── Placeholder ────────────────────────────────────────────────────────────── _/
+::placeholder {
+color: var(--color-text-muted) !important;
+}
+
+/_ ── Animations ─────────────────────────────────────────────────────────────── _/
+@keyframes fadeUp {
+from {
+opacity: 0;
+transform: translateY(24px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+@keyframes fadeIn {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+
+@keyframes floatBubble {
+0%,
+100% {
+transform: translateY(0) scale(1);
+}
+50% {
+transform: translateY(-20px) scale(1.03);
+}
+}
+
+@keyframes pulseGlow {
+0%,
+100% {
+box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4);
+}
+50% {
+box-shadow: 0 0 0 10px rgba(45, 212, 191, 0);
+}
+}
+
+@keyframes shimmer {
+0% {
+background-position: -200% center;
+}
+100% {
+background-position: 200% center;
+}
+}
+
+@keyframes msgIn {
+from {
+opacity: 0;
+transform: translateY(10px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/_ ── Utility classes ────────────────────────────────────────────────────────── _/
+.animate-fade-up {
+animation: fadeUp 0.6s ease both;
+}
+.animate-fade-in {
+animation: fadeIn 0.4s ease both;
+}
+.gradient-text {
+background: var(--color-brand-gradient);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+} \*/
