@@ -22,14 +22,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size='lg' asChild>
+            <SidebarMenuButton size='lg' asChild className='sidebar-primary'>
               <a href='#'>
                 <div className='flex items-center justify-between w-full px-2'>
-                  <h1 className='text-xl font-bold text-foreground'>Halo</h1>
+                  <h1 className='text-xl font-bold text-white'>Halo</h1>
                   <div className='flex items-center gap-2'>
-                    <Sun className='w-5 h-5 text-muted-foreground' />
-                    <Switch className='bg-gray-600' />
-                    <Moon className='w-5 h-5 text-muted-foreground' />
+                    <Sun className='text-white size-4' />
+                    <Switch
+                      checked={true}
+                      onCheckedChange={() => {}}
+                      className='data-[state=checked]:bg-background'
+                    />
+                    <Moon className='text-white size-4' />
                   </div>
                 </div>
               </a>
