@@ -1,12 +1,14 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    /* ── Shadcn/Tailwind required ──────────────────── */
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -25,78 +27,114 @@
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.809 0.105 251.813);
-    --chart-2: oklch(0.623 0.214 259.815);
-    --chart-3: oklch(0.546 0.245 262.881);
-    --chart-4: oklch(0.488 0.243 264.376);
-    --chart-5: oklch(0.424 0.199 265.638);
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
+
+    /* ── Sidebar (dark theme) ──────────────────────── */
+    --sidebar: oklch(0.13 0.02 240);
+    --sidebar-foreground: oklch(0.9 0 0);
     --sidebar-primary: oklch(0.205 0 0);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-accent: oklch(1 0 0 / 8%);
+    --sidebar-accent-foreground: oklch(1 0 0);
+    --sidebar-border: oklch(1 0 0 / 8%);
     --sidebar-ring: oklch(0.708 0 0);
+
+    /* ── Brand ─────────────────────────────────────── */
+    --color-brand-teal: #2dd4bf;
+    --color-brand-sky: #0ea5e9;
+    --color-brand-gradient: linear-gradient(135deg, #2dd4bf, #0ea5e9);
+
+    /* ── App background ────────────────────────────── */
+    --color-bg-base: #0b1e2d;
+    --color-bg-surface: rgba(255, 255, 255, 0.05);
+    --color-bg-surface-hover: rgba(255, 255, 255, 0.09);
+    --color-bg-glass: rgba(255, 255, 255, 0.07);
+
+    /* ── Text ──────────────────────────────────────── */
+    --color-text-primary: #ffffff;
+    --color-text-secondary: rgba(255, 255, 255, 0.55);
+    --color-text-muted: rgba(255, 255, 255, 0.3);
+    --color-text-brand: #2dd4bf;
+
+    /* ── Border ────────────────────────────────────── */
+    --color-border: rgba(255, 255, 255, 0.1);
+    --color-border-strong: rgba(255, 255, 255, 0.18);
+    --color-border-brand: rgba(45, 212, 191, 0.35);
+
+    /* ── Status ────────────────────────────────────── */
+    --color-online: #22c55e;
+    --color-danger: #f87171;
+
+    /* ── Typography ────────────────────────────────── */
+    --font-display: "Space Grotesk", sans-serif;
+    --font-body: "Inter", sans-serif;
+
+    /* ── Radius ────────────────────────────────────── */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    /* ── Shadow ────────────────────────────────────── */
+    --shadow-brand: 0 4px 20px rgba(45, 212, 191, 0.3);
+    --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.35);
+    --shadow-glow-sm: 0 0 20px rgba(45, 212, 191, 0.15);
   }
-  .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.809 0.105 251.813);
-    --chart-2: oklch(0.623 0.214 259.815);
-    --chart-3: oklch(0.546 0.245 262.881);
-    --chart-4: oklch(0.488 0.243 264.376);
-    --chart-5: oklch(0.424 0.199 265.638);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
-  }
-  .theme {
-    --font-sans: "Geist Variable", sans-serif;
-  }
+
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
   }
   html {
     @apply font-sans;
   }
+
+  /* ── Scrollbar ─────────────────────────────────── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+  }
+
+  /* ── Placeholder ───────────────────────────────── */
+  ::placeholder { color: var(--color-text-muted) !important; }
 }
 
-[data-slot="sidebar"] {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+/* ── Animations ──────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes floatBubble {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-20px) scale(1.03); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
+  50%       { box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
 }
 
-[data-sidebar="menu-button"] {
-  color: rgba(0, 0, 0, 0.7);
+/* ── Utility classes ─────────────────────────────── */
+.animate-fade-up { animation: fadeUp 0.6s ease both; }
+.animate-fade-in { animation: fadeIn 0.4s ease both; }
+.gradient-text {
+  background: var(--color-brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-[data-sidebar="menu-button"]:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #000000;
+/* ── Sidebar overrides ───────────────────────────── */
+[data-sidebar="group-label"] {
+  color: rgba(255, 255, 255, 0.35);
 }
