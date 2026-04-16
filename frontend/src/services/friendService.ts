@@ -26,7 +26,9 @@ const friendService = {
     friendshipId: string,
     status: "accepted" | "rejected"
   ): Promise<any> => {
-    const response = await axiosInstance.post(`/friends/${friendshipId}/respond`, { status });
+    // Backend expects { action: "accept" | "reject" }, không phải status
+    const action = status === "accepted" ? "accept" : "reject";
+    const response = await axiosInstance.post(`/friends/${friendshipId}/respond`, { action });
     return response.data;
   },
   

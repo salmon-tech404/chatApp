@@ -40,8 +40,17 @@ const NewGroupChatModel = () => {
     setIsLoading(true);
     try {
       const data = await friendService.getFriends();
-      setFriends(data);
+      // API có thể trả về array hoặc { friends: [...] } hoặc { data: [...] }
+      const list: Friend[] = Array.isArray(data)
+        ? data
+        : Array.isArray((data as any)?.friends)
+          ? (data as any).friends
+          : Array.isArray((data as any)?.data)
+            ? (data as any).data
+            : [];
+      setFriends(list);
     } catch (error) {
+      console.error("fetchFriends error:", error);
       toast.error("Không thể tải danh sách bạn bè");
     } finally {
       setIsLoading(false);
@@ -91,7 +100,7 @@ const NewGroupChatModel = () => {
       <DialogTrigger asChild>
          {/* Button bọc ngoài trigger */}
          <div className="w-full h-full text-sidebar-foreground hover:bg-sidebar-accent transition-colors flex items-center justify-center rounded-xl">
-            <Users className="h-4 w-4" />
+            <Users className="h-5 w-5" />
          </div>
       </DialogTrigger>
       

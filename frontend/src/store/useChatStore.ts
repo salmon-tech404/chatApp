@@ -10,6 +10,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   messages: [],
   isLoading: false,
   isSending: false,
+  unreadCounts: {},
 
   fetchConversations: async () => {
     set({ isLoading: true });
@@ -24,8 +25,13 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   },
 
   selectConversation: (conversation: Conversation) => {
-    set({ selectedConversation: conversation, messages: [] });
-    // Whenever a conversation is selected, fetch messages
+    // Reset unread count khi mở conversation
+    const { unreadCounts } = get();
+    set({
+      selectedConversation: conversation,
+      messages: [],
+      unreadCounts: { ...unreadCounts, [conversation._id]: 0 },
+    });
     get().fetchMessages(conversation._id);
   },
 
@@ -45,7 +51,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     content: string,
     type: "text" | "image" | "file" = "text",
   ) => {
-    const { selectedConversation, messages } = get();
+    const { selectedConversation } = get();
     if (!selectedConversation) return;
 
     set({ isSending: true });
@@ -65,18 +71,22 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   },
 
   receiveNewMessage: (message: Message) => {
-    const { selectedConversation, messages } = get();
+    const { selectedConversation, messages, unreadCounts } = get();
 
-    // Nếu tin nhắn mới thuộc về đoạn chat đang mở
-    if (
-      selectedConversation &&
-      message.conversationId === selectedConversation._id
-    ) {
+    if (selectedConversation && String(message.conversationId) === String(selectedConversation._id)) {
       // Tránh duplicate nếu người gửi chính là mình (đã thêm lúc sendMessage)
       const isDuplicate = messages.some((m) => m._id === message._id);
       if (!isDuplicate) {
         set({ messages: [...messages, message] });
       }
+    } else {
+      // Conversation khác → tăng unread count
+      set({
+        unreadCounts: {
+          ...unreadCounts,
+          [message.conversationId]: (unreadCounts[message.conversationId] ?? 0) + 1,
+        },
+      });
     }
 
     // Refresh danh sách conversations để đẩy đoạn chat lên đầu

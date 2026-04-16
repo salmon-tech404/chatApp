@@ -17,7 +17,7 @@ connectDB();
 // ✅ CORS — phải đặt TRƯỚC tất cả routes
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: true, // reflect request origin (allows any origin in dev)
     credentials: true, // cho phép gửi cookie từ client
   }),
 );

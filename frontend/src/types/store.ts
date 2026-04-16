@@ -39,7 +39,9 @@ export interface ChatState {
   messages: Message[];
   isLoading: boolean;
   isSending: boolean;
-  
+  // conversationId → số tin nhắn chưa đọc
+  unreadCounts: Record<string, number>;
+
   // Actions
   fetchConversations: () => Promise<void>;
   selectConversation: (conversation: Conversation) => void;

@@ -5,18 +5,18 @@ import User from "../models/User.js";
 export const sendFriendRequest = async (req, res) => {
   try {
     const requestedUserId = req.user._id;
-    const { receiverId } = req.body;
+    const { recipientId } = req.body;
 
     // Không thể tự kết bạn
-    if (requestedUserId.toString() === receiverId.toString()) {
+    if (requestedUserId.toString() === recipientId?.toString()) {
       return res
         .status(400)
         .json({ message: "Bạn không thể tự kết bạn với chính mình!" });
     }
 
-    //   Kiểm tra xem receiverId có tồn tại không
-    const receiver = await User.findById(receiverId);
-    if (!receiver) {
+    //   Kiểm tra xem recipientId có tồn tại không
+    const recipient = await User.findById(recipientId);
+    if (!recipient) {
       return res.status(404).json({ message: "Người dùng không tồn tại!" });
     }
 
@@ -24,8 +24,8 @@ export const sendFriendRequest = async (req, res) => {
     const existingFriendship = await Friendship.findOne({
       // Kiểm tra 2 chiều bằng toán tử or của MongoDB
       $or: [
-        { requesterId: requestedUserId, recipientId: receiverId },
-        { requesterId: receiverId, recipientId: requestedUserId },
+        { requesterId: requestedUserId, recipientId: recipientId },
+        { requesterId: recipientId, recipientId: requestedUserId },
       ],
     });
     if (existingFriendship) {
@@ -40,7 +40,7 @@ export const sendFriendRequest = async (req, res) => {
 
     const newFriendship = await Friendship.create({
       requesterId: requestedUserId,
-      recipientId: receiverId,
+      recipientId: recipientId,
       status: "pending",
     });
     res.status(201).json({
@@ -145,14 +145,17 @@ export const getFriends = async (req, res) => {
     const friendships = await Friendship.find({
       $or: [{ requesterId: userId }, { recipientId: userId }],
       status: "accepted",
-    }).populate("requesterId recipientId", "username email avatarUrl"); // Lấy thông tin người gửi và người nhận
+    }).populate("requesterId recipientId", "username displayName email avatarUrl");
 
-    // Chuyển đổi dữ liệu để trả về danh sách bạn bè
-    const friends = friendships.map((friendship) => {
-      return friendship.requesterId._id.toString() === userId.toString()
-        ? friendship.recipientId
-        : friendship.requesterId;
-    });
+    // Chuyển đổi dữ liệu để trả về danh sách bạn bè (lấy bên kia của friendship)
+    const friends = friendships
+      .map((friendship) => {
+        return friendship.requesterId._id.toString() === userId.toString()
+          ? friendship.recipientId
+          : friendship.requesterId;
+      })
+      .filter(Boolean) // loại bỏ null nếu populate thất bại
+      .filter((friend) => friend._id.toString() !== userId.toString()); // đảm bảo không trả về chính mình
     res.json({ friends });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách bạn bè:", error);
@@ -181,27 +184,29 @@ export const getPendingFriendRequests = async (req, res) => {
 // Tìm kiếm user để gửi lời mời kết bạn
 export const searchUsers = async (req, res) => {
   try {
-    const { query } = req.query; // Ví dụ: /search?query=name
+    // Hỗ trợ cả ?q= (frontend gửi) lẫn ?query= (fallback)
+    const searchTerm = req.query.q || req.query.query;
     const userId = req.user._id;
 
-    if (!query) {
+    if (!searchTerm) {
       return res
         .status(400)
         .json({ message: "Vui lòng nhập từ khóa tìm kiếm!" });
     }
 
-    // Tìm user theo username hoặc email, loại trừ chính bản thân mình
+    // Tìm user theo username hoặc displayName, loại trừ chính bản thân mình
     const users = await User.find({
       $and: [
         { _id: { $ne: userId } }, // Không hiện chính mình trong kết quả tìm kiếm
         {
           $or: [
-            { username: { $regex: query, $options: "i" } }, // "i" là không phân biệt hoa thường
-            { email: { $regex: query, $options: "i" } },
+            { username: { $regex: searchTerm, $options: "i" } },
+            { displayName: { $regex: searchTerm, $options: "i" } },
+            { email: { $regex: searchTerm, $options: "i" } },
           ],
         },
       ],
-    }).select("username email avatar");
+    }).select("username displayName email avatarUrl");
 
     res.status(200).json(users);
   } catch (error) {

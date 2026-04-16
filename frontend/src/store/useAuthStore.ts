@@ -85,8 +85,16 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "auth-storage", // tên key trong localStorage
+      name: "auth-storage",
       partialize: (state) => ({ user: state.user }),
+      // Migrate old sessions: backend used to return "id" instead of "_id"
+      merge: (persisted: unknown, current) => {
+        const ps = persisted as Record<string, Record<string, string>>;
+        if (ps?.user && !ps.user._id && ps.user.id) {
+          ps.user = { ...ps.user, _id: ps.user.id };
+        }
+        return { ...current, ...(ps as Partial<typeof current>) };
+      },
     },
   ),
 );

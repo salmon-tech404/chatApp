@@ -6,8 +6,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: true, // reflect request origin (allows any origin in dev)
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
@@ -21,6 +22,8 @@ io.on("connection", (socket) => {
   socket.on("join", (userId) => {
     userSocketMap.set(userId, socket.id);
     console.log(`User ${userId} joined with socket ${socket.id}`);
+    // Broadcast danh sách user đang online cho tất cả client
+    io.emit("onlineUsers", Array.from(userSocketMap.keys()));
   });
 
   socket.on("disconnect", () => {
@@ -32,6 +35,8 @@ io.on("connection", (socket) => {
         break;
       }
     }
+    // Broadcast danh sách user đang online sau khi xóa
+    io.emit("onlineUsers", Array.from(userSocketMap.keys()));
   });
 });
 

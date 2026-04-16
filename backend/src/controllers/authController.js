@@ -91,10 +91,11 @@ export const signIn = async (req, res) => {
       message: "Đăng nhập thành công",
       accessToken,
       user: {
-        id: user._id,
+        _id: user._id,
         username: user.username,
         displayName: user.displayName,
         email: user.email,
+        avatarUrl: user.avatarUrl,
       },
     });
   } catch (error) {
