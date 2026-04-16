@@ -83,6 +83,24 @@ export const respondToFriendRequest = async (req, res) => {
       // Cập nhật trạng thái lời mời kết bạn
       friendship.status = action === "accept" ? "accepted" : "rejected";
       await friendship.save();
+
+      // Nếu accept thành công, tự động tạo một Conversation (Direct Message) cho 2 người luôn
+      if (action === "accept") {
+        import("../models/Conversation.js").then(async (module) => {
+           const Conversation = module.default;
+           const existing = await Conversation.findOne({
+              type: "direct",
+              participants: { $all: [friendship.requesterId, friendship.recipientId] }
+           });
+           if (!existing) {
+              await Conversation.create({
+                 type: "direct",
+                 participants: [friendship.requesterId, friendship.recipientId]
+              });
+           }
+        });
+      }
+
       res.json({ message: `Lời mời kết bạn đã được ${action}ed!`, friendship });
     }
   } catch (error) {

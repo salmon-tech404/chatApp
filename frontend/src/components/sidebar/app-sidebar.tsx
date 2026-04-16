@@ -38,11 +38,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton
               size='lg'
               asChild
-              className='border-2 rounded-lg border-sidebar-border bg-sidebar-primary'
+              className='rounded-3xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-md transition-all pt-2 pb-2 h-auto h-[60px]'
             >
               <a href='#'>
                 <div className='flex items-center justify-between w-full px-2'>
-                  <h1 className='text-xl font-bold text-white'>Halo</h1>
+                  <h1 className='text-2xl font-bold text-primary-foreground tracking-tight'>Halo</h1>
                   <div className='flex items-center gap-2'>
                     <Sun className='text-white size-4' />
                     <Switch
@@ -62,11 +62,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {/* Body */}
       <SidebarContent>
         {/* New Chat */}
-        <SidebarGroup title='New Chat'>
-          <SidebarGroupContent>
-            <CreateNewChat />
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <div className="px-4 mt-2">
+          <CreateNewChat />
+        </div>
         {/* Group Chat */}
         <SidebarGroup title='Group Chats'>
           <SidebarGroupLabel className='uppercase'>nhóm chát</SidebarGroupLabel>
@@ -90,7 +88,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter>{/* <NavUser user={data.user} /> */}</SidebarFooter>
+      <SidebarFooter className='p-4'>
+         <div className='flex items-center justify-between w-full p-2 bg-sidebar-accent/50 rounded-2xl'>
+            <div className='flex items-center gap-3'>
+              {/* @ts-ignore - Giả lập user (sau này lấy từ auth.user) */}
+              <div className='h-10 w-10 shrink-0 overflow-hidden rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold'>
+                 U
+              </div>
+              <div className='flex flex-col'>
+                 <span className='font-semibold text-sm leading-tight text-foreground'>Cá nhân</span>
+                 <span className='text-xs text-muted-foreground'>Online</span>
+              </div>
+            </div>
+         </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }

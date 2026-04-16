@@ -9,3 +9,16 @@ export interface User {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface FriendRequest {
+  _id: string;
+  requesterId: User | string;
+  recipientId: User | string;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Friend extends User {
+  friendshipId?: string;
+}

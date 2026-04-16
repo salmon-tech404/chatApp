@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Conversation from "../models/Conversation.js";
 import Message from "../models/Message.js";
+import { getReceiverSocketId, io } from "../libs/socket.js";
 
 export const getConversations = async (req, res) => {
   try {
@@ -45,18 +46,28 @@ export const createConversation = async (req, res) => {
       }
       // Nếu chưa có thì tạo mới
       const newConversation = await Conversation.create({
-        participants:
-          type === "direct"
-            ? [userId, participantId]
-            : [userId, ...req.body.participants],
-        name: type === "group" ? name : undefined,
+        participants: [userId, participantId],
+        type: "direct",
       });
+      // Populate thông tin người tham gia và trả về
       // Populate thông tin người tham gia và trả về
       const populatedConversation = await newConversation.populate(
         "participants",
         "username displayName avatarUrl",
       );
       return res.status(201).json(populatedConversation);
+    } else if (type === "group") {
+      // Logic dành cho Group Chat
+      const newGroup = await Conversation.create({
+        participants: [userId, ...req.body.participants],
+        name: name || "Nhóm mới",
+        type: "group",
+      });
+      const populatedGroup = await newGroup.populate(
+        "participants",
+        "username displayName avatarUrl",
+      );
+      return res.status(201).json(populatedGroup);
     }
   } catch (error) {
     console.error("Lỗi createConversation:", error);
@@ -138,6 +149,15 @@ export const sendMessage = async (req, res) => {
       "senderId",
       "username displayName avatarUrl",
     );
+
+    // 6. Socket.io Realtime (Emit event to all participants)
+    conversation.participants.forEach((participantId) => {
+      // Don't emit to the sender itself (optional, but usually good practice. Let's emit to everyone including sender so other devices sync)
+      const socketId = getReceiverSocketId(participantId.toString());
+      if (socketId) {
+        io.to(socketId).emit("newMessage", populatedMessage);
+      }
+    });
 
     res.status(201).json(populatedMessage);
   } catch (error) {

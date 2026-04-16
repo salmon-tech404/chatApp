@@ -23,7 +23,7 @@ const ProtectedRoute = () => {
       setStarting(false);
     };
     bootstrap();
-  }, []);
+  }, [refresh, signOut, accessToken]);
 
   // Đang khởi động hoặc đang loading → chưa render gì
   if (starting || loading) {

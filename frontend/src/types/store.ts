@@ -2,11 +2,14 @@
 // Giống như bản vẽ của ngôi nhà cần những thứ gì gì
 
 import type { User } from "@/types/user";
+import type { Conversation, Message } from "@/types/chat";
 
 export interface AuthState {
   accessToken: string | null;
+  setAccessToken: (accessToken: string | null) => void;
   user: User | null;
   loading: boolean;
+  clearState: () => void;
 
   signUp: (
     username: string,
@@ -27,4 +30,20 @@ export interface ThemeState {
   isDarkMode: boolean;
   toggleTheme: () => void;
   setTheme: (dark: boolean) => void;
+}
+
+
+export interface ChatState {
+  conversations: Conversation[];
+  selectedConversation: Conversation | null;
+  messages: Message[];
+  isLoading: boolean;
+  isSending: boolean;
+  
+  // Actions
+  fetchConversations: () => Promise<void>;
+  selectConversation: (conversation: Conversation) => void;
+  fetchMessages: (conversationId: string) => Promise<void>;
+  sendMessage: (content: string, type?: "text" | "image" | "file") => Promise<void>;
+  receiveNewMessage: (message: Message) => void;
 }

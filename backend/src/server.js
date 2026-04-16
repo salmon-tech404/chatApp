@@ -1,9 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { connectDB } from "./libs/moongoDB.js";
-import authRoutes from "./routes/authRoutes.js";
 import cookieParser from "cookie-parser";
+import { connectDB } from "./libs/moongoDB.js";
+import { app, server } from "./libs/socket.js";
+import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import { protectedRoute } from "./middlewares/authMiddlewares.js";
@@ -11,7 +12,6 @@ import friendRoutes from "./routes/friendRoutes.js";
 
 dotenv.config();
 
-const app = express();
 connectDB();
 
 // ✅ CORS — phải đặt TRƯỚC tất cả routes
@@ -38,6 +38,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/conversations", conversationRoutes);
 app.use("/api/friends", friendRoutes);
 
-app.listen(SERVER_PORT, () => {
+server.listen(SERVER_PORT, () => {
   console.log(`🚀 Server is running on port ${SERVER_PORT} 💓`);
 });
