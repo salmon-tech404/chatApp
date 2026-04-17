@@ -28,6 +28,11 @@ export const connectSocket = () => {
     useChatStore.getState().receiveNewMessage(message);
   });
 
+  socket.on("newGroup", () => {
+    // Có group mới được tạo và mình là thành viên → tải lại danh sách conversations
+    useChatStore.getState().fetchConversations();
+  });
+
   socket.on("onlineUsers", (userIds: string[]) => {
     useOnlineStore.getState().setOnlineUsers(userIds);
   });

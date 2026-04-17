@@ -35,7 +35,21 @@ const friendService = {
   removeFriend: async (friendId: string): Promise<any> => {
     const response = await axiosInstance.delete(`/friends/remove/${friendId}`);
     return response.data;
-  }
+  },
+
+  cancelFriendRequest: async (receiverId: string): Promise<any> => {
+    const response = await axiosInstance.delete("/friends/cancel", { data: { receiverId } });
+    return response.data;
+  },
+
+  getFriendshipStatus: async (targetUserId: string): Promise<{
+    status: "none" | "pending" | "accepted" | "rejected";
+    friendshipId?: string;
+    isSender?: boolean;
+  }> => {
+    const response = await axiosInstance.get(`/friends/status/${targetUserId}`);
+    return response.data;
+  },
 };
 
 export default friendService;

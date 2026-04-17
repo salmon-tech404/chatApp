@@ -67,6 +67,17 @@ export const createConversation = async (req, res) => {
         "participants",
         "username displayName avatarUrl",
       );
+
+      // Notify tất cả thành viên (trừ người tạo) qua socket
+      populatedGroup.participants.forEach((participant) => {
+        const participantId = participant._id.toString();
+        if (participantId === userId.toString()) return; // bỏ qua người tạo
+        const socketId = getReceiverSocketId(participantId);
+        if (socketId) {
+          io.to(socketId).emit("newGroup", populatedGroup);
+        }
+      });
+
       return res.status(201).json(populatedGroup);
     }
   } catch (error) {

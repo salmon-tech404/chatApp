@@ -13,10 +13,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { User, FriendRequest, Friend } from "@/types/user";
 import { useChatStore } from "@/store/useChatStore";
 import { useAuthStore } from "@/store/useAuthStore";
+import UserChatDialog from "@/components/chat/UserChatDialog";
 
 type Tab = "search" | "pending" | "friends";
 
-const AddFriendModel = () => {
+interface AddFriendModelProps {
+  asButton?: boolean;
+}
+
+const AddFriendModel = ({ asButton = false }: AddFriendModelProps) => {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("search");
 
@@ -38,6 +43,10 @@ const AddFriendModel = () => {
 
   // Tracking ID đang được xử lý (accept/reject)
   const [respondingId, setRespondingId] = useState<string | null>(null);
+
+  // UserChatDialog
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [userChatOpen, setUserChatOpen] = useState(false);
 
   // Load pending count khi mount (cho badge ngoài trigger)
   useEffect(() => {
@@ -101,17 +110,6 @@ const AddFriendModel = () => {
     }
   };
 
-  const sendRequest = async (userId: string) => {
-    try {
-      await friendService.sendFriendRequest(userId);
-      toast.success("Đã gửi lời mời kết bạn!");
-    } catch (error: unknown) {
-      const msg =
-        error instanceof Error ? error.message : "Lỗi khi gửi lời mời";
-      toast.error(msg);
-    }
-  };
-
   const respondRequest = async (friendshipId: string, status: "accepted" | "rejected") => {
     setRespondingId(friendshipId);
     try {
@@ -140,17 +138,32 @@ const AddFriendModel = () => {
   ];
 
   return (
+    <>
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* ── Trigger: icon + badge số lời mời ────────────── */}
+      {/* ── Trigger ─────────────────────────────────────── */}
       <DialogTrigger asChild>
-        <div className="relative flex items-center justify-center w-full h-full">
-          <UserPlus className="h-5 w-5" />
-          {pendingCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 h-4 min-w-4 px-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-sidebar">
-              {pendingCount > 9 ? "9+" : pendingCount}
-            </span>
-          )}
-        </div>
+        {asButton ? (
+          /* Full-width button shown in sidebar */
+          <button className="relative w-full flex items-center gap-3 px-4 py-2.5 rounded-xl border border-dashed border-border/60 text-muted-foreground hover:text-foreground hover:border-[#2dd4bf]/50 hover:bg-[#2dd4bf]/5 transition-all text-sm font-medium">
+            <Search className="h-4 w-4 shrink-0 text-[#2dd4bf]" />
+            <span>Tìm kiếm bạn bè...</span>
+            {pendingCount > 0 && (
+              <span className="ml-auto h-5 min-w-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                {pendingCount > 9 ? "9+" : pendingCount}
+              </span>
+            )}
+          </button>
+        ) : (
+          /* Icon-only used as SidebarGroupAction */
+          <div className="relative flex items-center justify-center w-full h-full">
+            <UserPlus className="h-5 w-5" />
+            {pendingCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 h-4 min-w-4 px-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-sidebar">
+                {pendingCount > 9 ? "9+" : pendingCount}
+              </span>
+            )}
+          </div>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md bg-background rounded-2xl overflow-hidden border-border/50 p-0">
@@ -224,7 +237,8 @@ const AddFriendModel = () => {
                 searchResults.filter((u) => u._id !== currentUser?._id).map((u) => (
                   <div
                     key={u._id}
-                    className="flex items-center justify-between p-3 rounded-xl border border-border/50 bg-card hover:shadow-sm transition-shadow"
+                    onClick={() => { setSelectedUser(u); setUserChatOpen(true); }}
+                    className="flex items-center justify-between p-3 rounded-xl border border-border/50 bg-card hover:shadow-sm hover:border-[#2dd4bf]/30 transition-all cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
                       <Avatar className="h-9 w-9">
@@ -238,13 +252,9 @@ const AddFriendModel = () => {
                         <p className="text-xs text-muted-foreground">@{u.username}</p>
                       </div>
                     </div>
-                    <button
-                      onClick={() => sendRequest(u._id)}
-                      className="h-8 w-8 rounded-full bg-[#2dd4bf]/10 text-[#2dd4bf] flex items-center justify-center hover:bg-gradient-to-br hover:from-[#2dd4bf] hover:to-[#0ea5e9] hover:text-white transition-colors"
-                      title="Gửi lời mời kết bạn"
-                    >
+                    <div className="h-8 w-8 rounded-full bg-[#2dd4bf]/10 text-[#2dd4bf] flex items-center justify-center">
                       <UserPlus className="h-4 w-4" />
-                    </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -359,6 +369,15 @@ const AddFriendModel = () => {
         )}
       </DialogContent>
     </Dialog>
+
+    {/* Dialog xem profile + kết bạn / nhắn tin */}
+    <UserChatDialog
+      user={selectedUser}
+      open={userChatOpen}
+      onOpenChange={setUserChatOpen}
+      onNavigated={() => { setUserChatOpen(false); setOpen(false); }}
+    />
+  </>
   );
 };
 

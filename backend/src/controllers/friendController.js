@@ -194,24 +194,67 @@ export const searchUsers = async (req, res) => {
         .json({ message: "Vui lòng nhập từ khóa tìm kiếm!" });
     }
 
-    // Tìm user theo username hoặc displayName, loại trừ chính bản thân mình
-    const users = await User.find({
-      $and: [
-        { _id: { $ne: userId } }, // Không hiện chính mình trong kết quả tìm kiếm
-        {
-          $or: [
-            { username: { $regex: searchTerm, $options: "i" } },
-            { displayName: { $regex: searchTerm, $options: "i" } },
-            { email: { $regex: searchTerm, $options: "i" } },
-          ],
-        },
-      ],
-    }).select("username displayName email avatarUrl");
+    // Kiểm tra nếu searchTerm là MongoDB ObjectId hợp lệ (24 ký tự hex)
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(searchTerm);
 
+    let query;
+    if (isObjectId) {
+      // Tìm chính xác theo _id
+      query = {
+        $and: [
+          { _id: { $ne: userId } },
+          { _id: searchTerm },
+        ],
+      };
+    } else {
+      // Tìm theo username, displayName hoặc email
+      query = {
+        $and: [
+          { _id: { $ne: userId } },
+          {
+            $or: [
+              { username: { $regex: searchTerm, $options: "i" } },
+              { displayName: { $regex: searchTerm, $options: "i" } },
+              { email: { $regex: searchTerm, $options: "i" } },
+            ],
+          },
+        ],
+      };
+    }
+
+    const users = await User.find(query).select("username displayName email avatarUrl");
     res.status(200).json(users);
   } catch (error) {
     console.error("Lỗi tại searchUsers:", error);
     res.status(500).json({ message: "Lỗi máy chủ khi tìm kiếm người dùng!" });
+  }
+};
+
+// Lấy trạng thái mối quan hệ giữa user hiện tại và một user khác
+export const getFriendshipStatus = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { targetUserId } = req.params;
+
+    const friendship = await Friendship.findOne({
+      $or: [
+        { requesterId: userId, recipientId: targetUserId },
+        { requesterId: targetUserId, recipientId: userId },
+      ],
+    });
+
+    if (!friendship) {
+      return res.json({ status: "none" });
+    }
+
+    res.json({
+      status: friendship.status,           // "pending" | "accepted" | "rejected"
+      friendshipId: friendship._id,
+      isSender: friendship.requesterId.toString() === userId.toString(),
+    });
+  } catch (error) {
+    console.error("Lỗi tại getFriendshipStatus:", error);
+    res.status(500).json({ message: "Lỗi máy chủ khi lấy trạng thái bạn bè!" });
   }
 };
 

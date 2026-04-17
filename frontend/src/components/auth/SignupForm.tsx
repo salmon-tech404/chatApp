@@ -4,7 +4,8 @@ import { z } from "zod"; //Schema Validation
 import { useNavigate, Link } from "react-router";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import axios from "axios";
+import api from "@/lib/axios";
+import { isAxiosError } from "axios";
 import AuthInputField from "@/components/common/AuthInputField";
 
 // Tạo schema validation cho form đăng ký bằng zod
@@ -43,14 +44,12 @@ export default function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      await axios.post("http://localhost:5001/api/auth/signup", data, {
-        withCredentials: true,
-      });
+      await api.post("auth/signup", data);
       toast.success("Đăng ký thành công! 🎉");
       navigate("/login");
     } catch (err: unknown) {
       const message =
-        axios.isAxiosError(err) && err.response?.data?.message
+        isAxiosError(err) && err.response?.data?.message
           ? err.response.data.message
           : "Đăng ký thất bại, thử lại nhé!";
       toast.error(message);

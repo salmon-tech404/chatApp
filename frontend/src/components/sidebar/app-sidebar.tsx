@@ -52,6 +52,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <CreateNewChat />
         </div>
 
+        {/* Add Friend / Search User button */}
+        <div className="px-3">
+          <AddFriendModel asButton />
+        </div>
+
         {/* Group Chats */}
         <SidebarGroup>
           <SidebarGroupLabel className="uppercase text-[10px] font-bold tracking-widest text-muted-foreground/60">
@@ -70,9 +75,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupLabel className="uppercase text-[10px] font-bold tracking-widest text-muted-foreground/60">
             Bạn Bè
           </SidebarGroupLabel>
-          <SidebarGroupAction className="cursor-pointer !w-7 !h-7" title="Quản lý bạn bè">
-            <AddFriendModel />
-          </SidebarGroupAction>
           <SidebarGroupContent>
             <DirectMessageList />
           </SidebarGroupContent>

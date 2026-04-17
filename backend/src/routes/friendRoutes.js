@@ -8,6 +8,7 @@ import {
   getPendingFriendRequests,
   searchUsers,
   removeFriend,
+  getFriendshipStatus,
 } from "../controllers/friendController.js";
 
 const router = express.Router();
@@ -22,5 +23,6 @@ router.get("/pending", getPendingFriendRequests); // Lấy danh sách lời mờ
 router.get("/search", searchUsers); // Tìm kiếm user để gửi lời mời kết bạn
 
 router.delete("/remove/:friendId", removeFriend); // Xóa bạn bè
+router.get("/status/:targetUserId", getFriendshipStatus); // Lấy trạng thái mối quan hệ với user khác
 
 export default router;

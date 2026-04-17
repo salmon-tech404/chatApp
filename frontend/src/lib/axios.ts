@@ -2,7 +2,9 @@ import { useAuthStore } from "@/store/useAuthStore";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "/api",
+  // VITE_API_BASE_URL=https://api.yourdomain.com/api  → production
+  // (không set)                                       → Vite proxy /api  → dev / ngrok
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
   withCredentials: true,
 });
 
