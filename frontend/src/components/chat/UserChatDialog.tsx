@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import { isAxiosError } from "axios";
 import friendService from "@/services/friendService";
 import { useChatStore } from "@/store/useChatStore";
 import type { User } from "@/types/user";
@@ -69,8 +70,8 @@ const UserChatDialog = ({ user, open, onOpenChange, onNavigated }: UserChatDialo
       await friendService.sendFriendRequest(user._id);
       toast.success("Đã gửi lời mời kết bạn!");
       setStatusInfo({ status: "pending", isSender: true });
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message ?? "Lỗi khi gửi lời mời");
+    } catch (err) {
+      toast.error(isAxiosError(err) ? (err.response?.data?.message ?? "Lỗi khi gửi lời mời") : "Lỗi khi gửi lời mời");
     } finally {
       setIsActing(false);
     }
@@ -83,8 +84,8 @@ const UserChatDialog = ({ user, open, onOpenChange, onNavigated }: UserChatDialo
       await friendService.cancelFriendRequest(user._id);
       toast.success("Đã hủy lời mời kết bạn");
       setStatusInfo({ status: "none" });
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message ?? "Lỗi khi hủy lời mời");
+    } catch (err) {
+      toast.error(isAxiosError(err) ? (err.response?.data?.message ?? "Lỗi khi hủy lời mời") : "Lỗi khi hủy lời mời");
     } finally {
       setIsActing(false);
     }
@@ -103,8 +104,8 @@ const UserChatDialog = ({ user, open, onOpenChange, onNavigated }: UserChatDialo
         toast.success("Đã từ chối lời mời");
         setStatusInfo({ status: "none" });
       }
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message ?? "Lỗi khi xử lý lời mời");
+    } catch (err) {
+      toast.error(isAxiosError(err) ? (err.response?.data?.message ?? "Lỗi khi xử lý lời mời") : "Lỗi khi xử lý lời mời");
     } finally {
       setIsActing(false);
     }

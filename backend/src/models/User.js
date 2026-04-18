@@ -17,7 +17,6 @@ const userShema = new mongoose.Schema(
       type: String,
       required: true,
       lowercase: true,
-      lowercase: true,
       trim: true,
     },
     displayName: {
@@ -26,14 +25,33 @@ const userShema = new mongoose.Schema(
       trim: true,
     },
     avatarUrl: {
-      type: String, //Link CND để hiển thị hình
+      type: String,
     },
     avatarId: {
-      type: String, //Cloudinary public_id để xóa hình
+      type: String,
+    },
+    coverPhotoUrl: {
+      type: String,
+    },
+    coverPhotoId: {
+      type: String,
+    },
+    coverOffsetY: {
+      type: Number,
+      default: 50,
     },
     bio: {
       type: String,
       maxlength: 500,
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female", "other", null],
+      default: null,
+    },
+    birthday: {
+      type: Date,
+      default: null,
     },
     phone: {
       type: String,

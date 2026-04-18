@@ -69,6 +69,10 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      updateUser: (partial) => set((state) => ({
+        user: state.user ? { ...state.user, ...partial } : null,
+      })),
+
       refresh: async () => {
         try {
           set({ loading: true });

@@ -8,6 +8,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Users, Check } from "lucide-react";
+import { isAxiosError } from "axios";
 import friendService from "@/services/friendService";
 import chatService from "@/services/chatService";
 import { toast } from "sonner";
@@ -40,15 +41,7 @@ const NewGroupChatModel = () => {
     setIsLoading(true);
     try {
       const data = await friendService.getFriends();
-      // API có thể trả về array hoặc { friends: [...] } hoặc { data: [...] }
-      const list: Friend[] = Array.isArray(data)
-        ? data
-        : Array.isArray((data as any)?.friends)
-          ? (data as any).friends
-          : Array.isArray((data as any)?.data)
-            ? (data as any).data
-            : [];
-      setFriends(list);
+      setFriends(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("fetchFriends error:", error);
       toast.error("Không thể tải danh sách bạn bè");
@@ -88,8 +81,8 @@ const NewGroupChatModel = () => {
       toast.success("Tạo nhóm thành công!");
       fetchConversations(); // Tải lại danh sách Chat Sidebar
       setOpen(false); // Đóng model
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Lỗi khi tạo nhóm");
+    } catch (error) {
+      toast.error(isAxiosError(error) ? (error.response?.data?.message ?? "Lỗi khi tạo nhóm") : "Lỗi khi tạo nhóm");
     } finally {
       setIsSubmitting(false);
     }

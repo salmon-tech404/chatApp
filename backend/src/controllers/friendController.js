@@ -156,7 +156,7 @@ export const getFriends = async (req, res) => {
       })
       .filter(Boolean) // loại bỏ null nếu populate thất bại
       .filter((friend) => friend._id.toString() !== userId.toString()); // đảm bảo không trả về chính mình
-    res.json({ friends });
+    res.json(friends);
   } catch (error) {
     console.error("Lỗi khi lấy danh sách bạn bè:", error);
     res.status(500).json({ message: "Lỗi máy chủ tại getFriends!" });

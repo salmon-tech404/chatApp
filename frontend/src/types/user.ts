@@ -4,7 +4,11 @@ export interface User {
   displayName: string;
   email: string;
   avatarUrl?: string;
+  coverPhotoUrl?: string;
+  coverOffsetY?: number;
   bio?: string;
+  gender?: "male" | "female" | "other" | null;
+  birthday?: string | null;
   phone?: string;
   createdAt?: string;
   updatedAt?: string;

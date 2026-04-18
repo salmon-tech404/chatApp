@@ -24,6 +24,8 @@ export interface AuthState {
   signOut: () => Promise<void>;
 
   refresh: () => Promise<void>;
+
+  updateUser: (partial: Partial<User>) => void;
 }
 
 export interface ThemeState {

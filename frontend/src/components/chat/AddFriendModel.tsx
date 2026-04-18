@@ -79,15 +79,7 @@ const AddFriendModel = ({ asButton = false }: AddFriendModelProps) => {
     setIsLoadingFriends(true);
     try {
       const data = await friendService.getFriends();
-      // API có thể trả về array hoặc { friends: [...] } hoặc { data: [...] }
-      const list: Friend[] = Array.isArray(data)
-        ? data
-        : Array.isArray((data as any)?.friends)
-          ? (data as any).friends
-          : Array.isArray((data as any)?.data)
-            ? (data as any).data
-            : [];
-      setFriends(list);
+      setFriends(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("fetchFriends error:", error);
       toast.error("Lỗi khi tải danh sách bạn bè");

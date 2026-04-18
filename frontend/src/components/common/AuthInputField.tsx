@@ -43,10 +43,11 @@ const AuthInputField = forwardRef<HTMLInputElement, AuthInputFieldProps>(
           <input
             ref={ref}
             type={isPassword && showPassword ? "text" : type}
+            className="auth-input"
             onFocus={() => setFocused(true)}
             onBlur={(e) => {
               setFocused(false);
-              rest.onBlur?.(e); // giữ lại onBlur của react-hook-form
+              rest.onBlur?.(e);
             }}
             style={{
               flex: 1,

@@ -1,29 +1,36 @@
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import ChatWindowLayout from "@/components/chat/ChatWindowLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { connectSocket, disconnectSocket } from "@/services/socketService";
 import { useChatStore } from "@/store/useChatStore";
+import NavRail, { type NavPanel } from "@/components/layout/NavRail";
+import ChatPanel from "@/components/layout/ChatPanel";
+import FriendsPanel from "@/components/layout/FriendsPanel";
+import ChatWindowLayout from "@/components/chat/ChatWindowLayout";
 
 const ChatPage = () => {
-  const fetchConversations = useChatStore((state) => state.fetchConversations);
+  const fetchConversations = useChatStore((s) => s.fetchConversations);
+  const [activePanel, setActivePanel] = useState<NavPanel>("chat");
 
   useEffect(() => {
     connectSocket();
     fetchConversations();
-    
-    return () => {
-      disconnectSocket();
-    };
+    return () => { disconnectSocket(); };
   }, [fetchConversations]);
+
   return (
-    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <ChatWindowLayout />
-        </SidebarInset>
-      </SidebarProvider>
+    <div className="flex h-screen overflow-hidden bg-background">
+      {/* ── Nav Rail (64px) ─────────────────────── */}
+      <NavRail activePanel={activePanel} onPanelChange={setActivePanel} />
+
+      {/* ── Side Panel (280px) ──────────────────── */}
+      <div className="w-[280px] shrink-0 border-r border-border/50 overflow-hidden">
+        {activePanel === "chat" && <ChatPanel />}
+        {activePanel === "friends" && <FriendsPanel />}
+      </div>
+
+      {/* ── Chat window ─────────────────────────── */}
+      <div className="flex-1 overflow-hidden">
+        <ChatWindowLayout />
+      </div>
     </div>
   );
 };

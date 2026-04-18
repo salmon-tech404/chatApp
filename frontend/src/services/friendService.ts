@@ -17,29 +17,24 @@ const friendService = {
     return response.data;
   },
 
-  sendFriendRequest: async (recipientId: string): Promise<any> => {
-    const response = await axiosInstance.post("/friends/request", { recipientId });
-    return response.data;
+  sendFriendRequest: async (recipientId: string): Promise<void> => {
+    await axiosInstance.post("/friends/request", { recipientId });
   },
 
   respondToRequest: async (
     friendshipId: string,
     status: "accepted" | "rejected"
-  ): Promise<any> => {
-    // Backend expects { action: "accept" | "reject" }, không phải status
+  ): Promise<void> => {
     const action = status === "accepted" ? "accept" : "reject";
-    const response = await axiosInstance.post(`/friends/${friendshipId}/respond`, { action });
-    return response.data;
-  },
-  
-  removeFriend: async (friendId: string): Promise<any> => {
-    const response = await axiosInstance.delete(`/friends/remove/${friendId}`);
-    return response.data;
+    await axiosInstance.post(`/friends/${friendshipId}/respond`, { action });
   },
 
-  cancelFriendRequest: async (receiverId: string): Promise<any> => {
-    const response = await axiosInstance.delete("/friends/cancel", { data: { receiverId } });
-    return response.data;
+  removeFriend: async (friendId: string): Promise<void> => {
+    await axiosInstance.delete(`/friends/remove/${friendId}`);
+  },
+
+  cancelFriendRequest: async (receiverId: string): Promise<void> => {
+    await axiosInstance.delete("/friends/cancel", { data: { receiverId } });
   },
 
   getFriendshipStatus: async (targetUserId: string): Promise<{
