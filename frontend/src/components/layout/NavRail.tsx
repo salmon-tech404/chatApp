@@ -9,7 +9,9 @@ import {
   Globe,
   LogOut,
   ChevronRight,
+  Home,
 } from "lucide-react";
+import { useNavigate } from "react-router";
 import AccountInfoDialog from "@/components/settings/AccountInfoDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -25,6 +27,7 @@ interface NavRailProps {
 const NavRail = ({ activePanel, onPanelChange }: NavRailProps) => {
   const { user, signOut } = useAuthStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
+  const navigate = useNavigate();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [accountInfoOpen, setAccountInfoOpen] = useState(false);
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -52,10 +55,17 @@ const NavRail = ({ activePanel, onPanelChange }: NavRailProps) => {
   return (
     <>
     <div className='flex flex-col items-center w-16 h-full bg-[#1a2740] shrink-0 py-3 gap-1 z-20'>
-      {/* ── Logo ─────────────────────────────────── */}
-      <div className='flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2dd4bf] to-[#0ea5e9] shadow-lg shadow-[#2dd4bf]/30 mb-3 shrink-0'>
-        <span className='text-sm font-black tracking-tight text-white'>H</span>
-      </div>
+      {/* ── Logo / Home ──────────────────────────── */}
+      <button
+        onClick={() => navigate("/")}
+        title='Trang chủ'
+        className='relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2dd4bf] to-[#0ea5e9] shadow-lg shadow-[#2dd4bf]/30 mb-3 shrink-0 hover:opacity-80 transition-opacity group'
+      >
+        <Home className='w-5 h-5 text-white' />
+        <span className='pointer-events-none absolute left-[calc(100%+10px)] top-1/2 -translate-y-1/2 bg-foreground text-background text-xs font-semibold px-2 py-1 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-50'>
+          Trang chủ
+        </span>
+      </button>
 
       {/* ── Nav items ────────────────────────────── */}
       <nav className='flex flex-col items-center flex-1 gap-1'>

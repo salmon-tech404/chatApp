@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router";
 import AppLogo from "@/components/common/AppLogo.tsx";
 import GradientButton from "@/components/common/GradientButton.tsx";
 import styles from "@/styles/navbar.module.css";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const NAV_LINKS = [
   { name: "Trang chủ", path: "/" },
@@ -12,6 +13,7 @@ const NAV_LINKS = [
 export default function NavBar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuthStore();
 
   return (
     <nav className={styles.navbar}>
@@ -32,20 +34,32 @@ export default function NavBar() {
       </div>
 
       <div className={styles.navActions}>
-        <GradientButton
-          variant='ghost'
-          size='sm'
-          onClick={() => navigate("/login")}
-        >
-          Đăng nhập
-        </GradientButton>
-        <GradientButton
-          variant='outline'
-          size='sm'
-          onClick={() => navigate("/signup")}
-        >
-          Đăng ký
-        </GradientButton>
+        {user ? (
+          <GradientButton
+            variant='primary'
+            size='sm'
+            onClick={() => navigate("/chat")}
+          >
+            Mở chat
+          </GradientButton>
+        ) : (
+          <>
+            <GradientButton
+              variant='ghost'
+              size='sm'
+              onClick={() => navigate("/login")}
+            >
+              Đăng nhập
+            </GradientButton>
+            <GradientButton
+              variant='outline'
+              size='sm'
+              onClick={() => navigate("/signup")}
+            >
+              Đăng ký
+            </GradientButton>
+          </>
+        )}
       </div>
     </nav>
   );
