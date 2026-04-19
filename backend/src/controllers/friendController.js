@@ -1,5 +1,9 @@
+import mongoose from "mongoose";
 import Friendship from "../models/Friendship.js";
 import User from "../models/User.js";
+import Conversation from "../models/Conversation.js";
+
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 // Gửi lời mời kết bạn
 export const sendFriendRequest = async (req, res) => {
@@ -84,21 +88,17 @@ export const respondToFriendRequest = async (req, res) => {
       friendship.status = action === "accept" ? "accepted" : "rejected";
       await friendship.save();
 
-      // Nếu accept thành công, tự động tạo một Conversation (Direct Message) cho 2 người luôn
       if (action === "accept") {
-        import("../models/Conversation.js").then(async (module) => {
-           const Conversation = module.default;
-           const existing = await Conversation.findOne({
-              type: "direct",
-              participants: { $all: [friendship.requesterId, friendship.recipientId] }
-           });
-           if (!existing) {
-              await Conversation.create({
-                 type: "direct",
-                 participants: [friendship.requesterId, friendship.recipientId]
-              });
-           }
+        const existing = await Conversation.findOne({
+          type: "direct",
+          participants: { $all: [friendship.requesterId, friendship.recipientId] },
         });
+        if (!existing) {
+          await Conversation.create({
+            type: "direct",
+            participants: [friendship.requesterId, friendship.recipientId],
+          });
+        }
       }
 
       res.json({ message: `Lời mời kết bạn đã được ${action}ed!`, friendship });
@@ -172,7 +172,7 @@ export const getPendingFriendRequests = async (req, res) => {
     const requests = await Friendship.find({
       recipientId: userId,
       status: "pending",
-    }).populate("requesterId", "username email avatar");
+    }).populate("requesterId", "username email avatarUrl");
 
     res.status(200).json(requests);
   } catch (error) {
@@ -213,9 +213,9 @@ export const searchUsers = async (req, res) => {
           { _id: { $ne: userId } },
           {
             $or: [
-              { username: { $regex: searchTerm, $options: "i" } },
-              { displayName: { $regex: searchTerm, $options: "i" } },
-              { email: { $regex: searchTerm, $options: "i" } },
+              { username: { $regex: escapeRegex(searchTerm), $options: "i" } },
+              { displayName: { $regex: escapeRegex(searchTerm), $options: "i" } },
+              { email: { $regex: escapeRegex(searchTerm), $options: "i" } },
             ],
           },
         ],
@@ -235,6 +235,10 @@ export const getFriendshipStatus = async (req, res) => {
   try {
     const userId = req.user._id;
     const { targetUserId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(targetUserId)) {
+      return res.json({ status: "none" });
+    }
 
     const friendship = await Friendship.findOne({
       $or: [
@@ -262,8 +266,7 @@ export const getFriendshipStatus = async (req, res) => {
 export const removeFriend = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { friendId } = req.params; // ví dụ: DELETE /api/friends/remove/:friendId
-    console.log("friendId: ", friendId);
+    const { friendId } = req.params;
 
     // Tìm và xóa mối quan hệ bạn bè (bất kể ai là người gửi lời mời trước đó)
     const deletedFriendship = await Friendship.findOneAndDelete({

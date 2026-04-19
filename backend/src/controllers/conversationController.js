@@ -27,11 +27,6 @@ export const createConversation = async (req, res) => {
     const userId = req.user._id;
     const { participantId, type = "direct", name } = req.body;
 
-    console.log("createConversation - participantId:", participantId);
-    console.log("createConversation - type:", type);
-    console.log("createConversation - name:", name);
-
-    // Kiểm tra chat direct hay group
     if (!participantId) {
       return res.status(400).json({ message: "Thiếu participantId" });
     }
@@ -79,6 +74,8 @@ export const createConversation = async (req, res) => {
       });
 
       return res.status(201).json(populatedGroup);
+    } else {
+      return res.status(400).json({ message: "Loại conversation không hợp lệ" });
     }
   } catch (error) {
     console.error("Lỗi createConversation:", error);
@@ -104,7 +101,7 @@ export const getMessages = async (req, res) => {
     }
 
     const messages = await Message.find({ conversationId })
-      .populate("senderId", "username, displayName avatarUrl")
+      .populate("senderId", "username displayName avatarUrl")
       .sort({ createdAt: 1 }); // Sắp xếp theo thời gian tạo (từ cũ đến mới)
 
     return res.status(200).json(messages);
@@ -122,17 +119,14 @@ export const sendMessage = async (req, res) => {
 
     // 1. Validation
     if (!content) return res.status(400).json({ message: "Nội dung trống" });
+    if (!mongoose.Types.ObjectId.isValid(conversationId)) {
+      return res.status(400).json({ message: "conversationId không hợp lệ" });
+    }
 
-    // 2. Authorization (Xác thực quyền)
     const conversation = await Conversation.findOne({
-      _id: conversationId.trim(),
-      participants: userId, // Kiểm tra user có trong mảng participants không
+      _id: conversationId,
+      participants: userId,
     });
-    console.log("Id conversation:", conversationId);
-    console.log(
-      "participants: ",
-      conversation ? conversation.participants : "Không tìm thấy conversation",
-    );
 
     if (!conversation) {
       return res

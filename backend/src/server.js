@@ -15,10 +15,14 @@ dotenv.config();
 connectDB();
 
 // ✅ CORS — phải đặt TRƯỚC tất cả routes
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map((o) => o.trim())
+  : true; // dev fallback: allow all
+
 app.use(
   cors({
-    origin: true, // reflect request origin (allows any origin in dev)
-    credentials: true, // cho phép gửi cookie từ client
+    origin: allowedOrigins,
+    credentials: true,
   }),
 );
 const SERVER_PORT = process.env.SERVER_PORT;

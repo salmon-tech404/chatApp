@@ -37,6 +37,14 @@ export const connectSocket = () => {
     useOnlineStore.getState().setOnlineUsers(userIds);
   });
 
+  socket.on("connect_error", (err) => {
+    console.error("Socket connection error:", err.message);
+  });
+
+  socket.on("error", (err: Error) => {
+    console.error("Socket error:", err.message);
+  });
+
   socket.on("disconnect", () => {
     console.log("Disconnected from socket server");
   });

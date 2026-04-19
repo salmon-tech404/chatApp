@@ -71,25 +71,36 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   },
 
   receiveNewMessage: (message: Message) => {
-    const { selectedConversation, messages, unreadCounts } = get();
+    const { selectedConversation, messages, unreadCounts, conversations } = get();
+    const convId = String(message.conversationId);
 
-    if (selectedConversation && String(message.conversationId) === String(selectedConversation._id)) {
-      // Tránh duplicate nếu người gửi chính là mình (đã thêm lúc sendMessage)
+    if (selectedConversation && convId === String(selectedConversation._id)) {
       const isDuplicate = messages.some((m) => m._id === message._id);
       if (!isDuplicate) {
         set({ messages: [...messages, message] });
       }
     } else {
-      // Conversation khác → tăng unread count
       set({
         unreadCounts: {
           ...unreadCounts,
-          [message.conversationId]: (unreadCounts[message.conversationId] ?? 0) + 1,
+          [convId]: (unreadCounts[convId] ?? 0) + 1,
         },
       });
     }
 
-    // Refresh danh sách conversations để đẩy đoạn chat lên đầu
-    get().fetchConversations();
+    // Update lastMessage/lastMessageAt in-place — avoids full refetch on every message
+    const exists = conversations.some((c) => String(c._id) === convId);
+    if (exists) {
+      set({
+        conversations: conversations.map((c) =>
+          String(c._id) === convId
+            ? { ...c, lastMessage: message, lastMessageAt: message.createdAt }
+            : c,
+        ),
+      });
+    } else {
+      // Unknown conversation (e.g. added to a new group) — fetch once to get full data
+      get().fetchConversations();
+    }
   },
 }));
