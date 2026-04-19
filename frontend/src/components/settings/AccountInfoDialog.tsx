@@ -88,20 +88,32 @@ const AccountInfoDialog = ({ open, onOpenChange }: Props) => {
   const dragStartY = useRef<number | null>(null);
   const dragStartOffset = useRef(50);
 
-  // Sync store → form on open
+  // Sync store → form on open, then fetch fresh profile from server
   useEffect(() => {
-    if (open && user) {
-      setDisplayName(user.displayName ?? "");
-      setBio(user.bio ?? "");
-      setGender((user.gender as typeof gender) ?? "");
-      const bd = parseBirthday(user.birthday);
-      setBDay(bd.day); setBMonth(bd.month); setBYear(bd.year);
-      setPhone(user.phone ?? "");
-      const oy = user.coverOffsetY ?? 50;
-      setOffsetY(oy); setSavedOffsetY(oy);
-      setEditingName(false); setRepositioning(false);
-    }
-  }, [open, user]);
+    if (!open || !user) return;
+    setDisplayName(user.displayName ?? "");
+    setBio(user.bio ?? "");
+    setGender((user.gender as typeof gender) ?? "");
+    const bd = parseBirthday(user.birthday);
+    setBDay(bd.day); setBMonth(bd.month); setBYear(bd.year);
+    setPhone(user.phone ?? "");
+    const oy = user.coverOffsetY ?? 50;
+    setOffsetY(oy); setSavedOffsetY(oy);
+    setEditingName(false); setRepositioning(false);
+
+    // Fetch fresh data from server to override stale cache
+    userService.getProfile().then((fresh) => {
+      updateUser(fresh);
+      setDisplayName(fresh.displayName ?? "");
+      setBio(fresh.bio ?? "");
+      setGender((fresh.gender as typeof gender) ?? "");
+      const bd2 = parseBirthday(fresh.birthday);
+      setBDay(bd2.day); setBMonth(bd2.month); setBYear(bd2.year);
+      setPhone(fresh.phone ?? "");
+      const oy2 = fresh.coverOffsetY ?? 50;
+      setOffsetY(oy2); setSavedOffsetY(oy2);
+    }).catch(() => {});
+  }, [open]);
 
   // ── Avatar upload ──────────────────────────────────────────────
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
