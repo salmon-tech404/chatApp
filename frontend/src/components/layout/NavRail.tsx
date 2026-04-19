@@ -60,9 +60,12 @@ const NavRail = ({ activePanel, onPanelChange }: NavRailProps) => {
       <button
         onClick={() => navigate("/")}
         title='Trang chủ'
-        className='flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2dd4bf] to-[#0ea5e9] shadow-lg shadow-[#2dd4bf]/30 mb-3 shrink-0 hover:opacity-90 transition-opacity'
+        className='relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2dd4bf] to-[#0ea5e9] shadow-lg shadow-[#2dd4bf]/30 mb-3 shrink-0 hover:opacity-80 transition-opacity group'
       >
         <Home className='w-5 h-5 text-white' />
+        <span className='pointer-events-none absolute left-[calc(100%+10px)] top-1/2 -translate-y-1/2 bg-foreground text-background text-xs font-semibold px-2 py-1 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-50'>
+          Trang chủ
+        </span>
       </button>
 
       {/* ── Nav items ────────────────────────────────────── */}
