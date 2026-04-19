@@ -6,20 +6,8 @@ on:
       - develop
 
 jobs:
-  deploy-backend-stg:
-    name: Deploy Backend → Render STG
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Render STG deploy
-        run: |
-          curl -s -X POST "${{ secrets.RENDER_STG_DEPLOY_HOOK }}" \
-            -H "Content-Type: application/json" \
-            --fail
-        env:
-          RENDER_STG_DEPLOY_HOOK: ${{ secrets.RENDER_STG_DEPLOY_HOOK }}
-
-  deploy-frontend-stg:
-    name: Deploy Frontend → Vercel STG
+  ci-and-deploy:
+    name: TypeScript Check → Deploy STG
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,20 +18,13 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
 
-      - name: Build (STG)
+      - name: TypeScript check
         working-directory: frontend
-        run: npm run build
-        env:
-          VITE_API_BASE_URL: ${{ secrets.STG_VITE_API_BASE_URL }}
+        run: npx tsc --noEmit
 
-      - name: Deploy to Vercel (Preview)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: frontend
+      - name: Trigger Render STG deploy
+        run: curl -s "${{ secrets.RENDER_STG_DEPLOY_HOOK }}" --fail
