@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router";
 import {
   MessageSquare,
   Users,
@@ -11,7 +12,6 @@ import {
   ChevronRight,
   Home,
 } from "lucide-react";
-import { useNavigate } from "react-router";
 import AccountInfoDialog from "@/components/settings/AccountInfoDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -25,9 +25,9 @@ interface NavRailProps {
 }
 
 const NavRail = ({ activePanel, onPanelChange }: NavRailProps) => {
+  const navigate = useNavigate();
   const { user, signOut } = useAuthStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
-  const navigate = useNavigate();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [accountInfoOpen, setAccountInfoOpen] = useState(false);
   const settingsRef = useRef<HTMLDivElement>(null);
@@ -54,8 +54,9 @@ const NavRail = ({ activePanel, onPanelChange }: NavRailProps) => {
 
   return (
     <>
-    <div className='flex flex-col items-center w-16 h-full bg-[#1a2740] shrink-0 py-3 gap-1 z-20'>
-      {/* ── Logo / Home ──────────────────────────── */}
+    {/* ── Desktop Nav Rail ─────────────────────────────────── */}
+    <div className='hidden md:flex flex-col items-center w-16 h-full bg-[#1a2740] shrink-0 py-3 gap-1 z-20'>
+      {/* ── Home logo ────────────────────────────────────── */}
       <button
         onClick={() => navigate("/")}
         title='Trang chủ'
@@ -67,7 +68,7 @@ const NavRail = ({ activePanel, onPanelChange }: NavRailProps) => {
         </span>
       </button>
 
-      {/* ── Nav items ────────────────────────────── */}
+      {/* ── Nav items ────────────────────────────────────── */}
       <nav className='flex flex-col items-center flex-1 gap-1'>
         {navItems.map(({ id, icon: Icon, label }) => {
           const isActive = activePanel === id;
@@ -212,6 +213,82 @@ const NavRail = ({ activePanel, onPanelChange }: NavRailProps) => {
           <p className='font-bold truncate'>{user?.displayName}</p>
           <p className='truncate text-background/60'>@{user?.username}</p>
         </div>
+      </button>
+    </div>
+
+    {/* ── Mobile Bottom Tab Bar ────────────────────────────── */}
+    <div className='md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#1a2740] border-t border-white/10 flex items-center justify-around px-4 z-30'>
+      {navItems.map(({ id, icon: Icon, label }) => {
+        const isActive = activePanel === id;
+        return (
+          <button
+            key={id}
+            onClick={() => onPanelChange(id)}
+            className={`flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition-colors ${
+              isActive ? "text-[#2dd4bf]" : "text-white/40"
+            }`}
+          >
+            <Icon className='w-5 h-5' />
+            <span className='text-[10px] font-semibold'>{label}</span>
+          </button>
+        );
+      })}
+
+      {/* Settings */}
+      <div ref={settingsRef} className='relative'>
+        <button
+          onClick={() => setSettingsOpen((v) => !v)}
+          className={`flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition-colors ${
+            settingsOpen ? "text-white" : "text-white/40"
+          }`}
+        >
+          <Settings className={`w-5 h-5 transition-transform duration-300 ${settingsOpen ? "rotate-45" : ""}`} />
+          <span className='text-[10px] font-semibold'>Cài đặt</span>
+        </button>
+
+        {settingsOpen && (
+          <div className='absolute bottom-[calc(100%+8px)] right-0 w-56 bg-background border border-border rounded-2xl shadow-xl overflow-hidden z-50'>
+            <div className='px-4 py-3 border-b border-border/50'>
+              <p className='text-xs font-bold tracking-widest uppercase text-muted-foreground'>Cài đặt</p>
+            </div>
+            <button onClick={toggleTheme} className='flex items-center justify-between w-full px-4 py-3 transition-colors hover:bg-muted/60'>
+              <div className='flex items-center gap-3'>
+                {isDarkMode ? <Moon className='h-4 w-4 text-[#2dd4bf]' /> : <Sun className='w-4 h-4 text-amber-400' />}
+                <span className='text-sm font-medium'>{isDarkMode ? "Chế độ tối" : "Chế độ sáng"}</span>
+              </div>
+              <div className={`w-9 h-5 rounded-full flex items-center px-0.5 transition-colors ${isDarkMode ? "bg-[#2dd4bf]" : "bg-muted-foreground/30"}`}>
+                <div className={`w-4 h-4 rounded-full bg-white shadow transition-transform ${isDarkMode ? "translate-x-4" : "translate-x-0"}`} />
+              </div>
+            </button>
+            <button onClick={() => { setSettingsOpen(false); setAccountInfoOpen(true); }} className='flex items-center w-full gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60'>
+              <User className='w-4 h-4 text-muted-foreground shrink-0' />
+              <span className='text-sm font-medium'>Thông tin tài khoản</span>
+              <ChevronRight className='h-3.5 w-3.5 text-muted-foreground ml-auto' />
+            </button>
+            <div className='border-t border-border/50' />
+            <button onClick={() => { setSettingsOpen(false); signOut(); }} className='flex items-center w-full gap-3 px-4 py-3 text-red-500 transition-colors hover:bg-red-500/10'>
+              <LogOut className='w-4 h-4 shrink-0' />
+              <span className='text-sm font-medium'>Thoát</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Avatar */}
+      <button
+        onClick={() => setAccountInfoOpen(true)}
+        className='flex flex-col items-center gap-0.5 px-2 py-1'
+      >
+        <div className='relative'>
+          <Avatar className='h-7 w-7 ring-2 ring-[#2dd4bf]/30'>
+            <AvatarImage src={user?.avatarUrl} alt={user?.displayName} />
+            <AvatarFallback className='bg-gradient-to-br from-[#2dd4bf] to-[#0ea5e9] text-white font-bold text-xs'>
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+          <span className='absolute bottom-0 right-0 h-2 w-2 rounded-full bg-green-500 border border-[#1a2740]' />
+        </div>
+        <span className='text-[10px] font-semibold text-white/40'>Tôi</span>
       </button>
     </div>
 

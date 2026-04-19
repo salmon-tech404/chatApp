@@ -8,7 +8,9 @@ import ChatWindowLayout from "@/components/chat/ChatWindowLayout";
 
 const ChatPage = () => {
   const fetchConversations = useChatStore((s) => s.fetchConversations);
+  const selectedConversation = useChatStore((s) => s.selectedConversation);
   const [activePanel, setActivePanel] = useState<NavPanel>("chat");
+  const [mobileView, setMobileView] = useState<"list" | "chat">("list");
 
   useEffect(() => {
     connectSocket();
@@ -16,20 +18,23 @@ const ChatPage = () => {
     return () => { disconnectSocket(); };
   }, [fetchConversations]);
 
+  useEffect(() => {
+    if (selectedConversation) setMobileView("chat");
+  }, [selectedConversation]);
+
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      {/* ── Nav Rail (64px) ─────────────────────── */}
+    <div className="flex h-[100dvh] overflow-hidden bg-background">
       <NavRail activePanel={activePanel} onPanelChange={setActivePanel} />
 
-      {/* ── Side Panel (280px) ──────────────────── */}
-      <div className="w-[280px] shrink-0 border-r border-border/50 overflow-hidden">
+      {/* Side panel — full width on mobile when in list view */}
+      <div className={`${mobileView === "list" ? "flex" : "hidden"} md:flex flex-col w-full md:w-[280px] shrink-0 border-r border-border/50 overflow-hidden pb-16 md:pb-0`}>
         {activePanel === "chat" && <ChatPanel />}
         {activePanel === "friends" && <FriendsPanel />}
       </div>
 
-      {/* ── Chat window ─────────────────────────── */}
-      <div className="flex-1 overflow-hidden">
-        <ChatWindowLayout />
+      {/* Chat window — full width on mobile when in chat view */}
+      <div className={`${mobileView === "chat" ? "flex" : "hidden"} md:flex flex-1 overflow-hidden flex-col`}>
+        <ChatWindowLayout onBack={() => setMobileView("list")} />
       </div>
     </div>
   );

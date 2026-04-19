@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   MessageSquare, Users, Send, Paperclip, Image as ImageIcon,
   Phone, Video, MoreVertical, Smile, FileText, X, Download,
-  Music, Film,
+  Music, Film, ArrowLeft,
 } from "lucide-react";
 import type { Participant } from "@/types/chat";
 
@@ -122,7 +122,11 @@ const FileCard = ({
 };
 
 // ── Main component ────────────────────────────────────────
-const ChatWindowLayout = () => {
+interface ChatWindowLayoutProps {
+  onBack?: () => void;
+}
+
+const ChatWindowLayout = ({ onBack }: ChatWindowLayoutProps) => {
   const { selectedConversation, messages, isSending, sendMessage } = useChatStore();
   const { user } = useAuthStore();
   const onlineUserIds = useOnlineStore((state) => state.onlineUserIds);
@@ -259,6 +263,14 @@ const ChatWindowLayout = () => {
       {/* ── Header ──────────────────────────────────────── */}
       <header className="shrink-0 h-16 border-b flex items-center justify-between px-5 bg-background/95 backdrop-blur-sm z-10 shadow-sm">
         <div className="flex items-center gap-3">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="md:hidden p-2 -ml-1 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          )}
           <div className="relative">
             <Avatar className="h-10 w-10 ring-2 ring-[#2dd4bf]/20">
               {isGroup ? (
@@ -333,7 +345,7 @@ const ChatWindowLayout = () => {
                   </div>
                 )}
 
-                <div className={`flex flex-col max-w-[65%] ${isMine ? "items-end" : "items-start"}`}>
+                <div className={`flex flex-col max-w-[85%] md:max-w-[65%] ${isMine ? "items-end" : "items-start"}`}>
                   {!isMine && isGroup && isFirstInGroup && sender && (
                     <span className="text-[11px] font-semibold text-[#0ea5e9] mb-1 ml-1">{sender.displayName}</span>
                   )}
@@ -398,7 +410,7 @@ const ChatWindowLayout = () => {
           <div className="relative" ref={emojiPickerRef}>
             {/* Emoji Picker */}
             {showEmojiPicker && (
-              <div className="absolute bottom-full left-0 mb-2 w-80 bg-background border border-border rounded-2xl shadow-xl z-50 overflow-hidden">
+              <div className="absolute bottom-full left-0 mb-2 w-[min(320px,calc(100vw-32px))] bg-background border border-border rounded-2xl shadow-xl z-50 overflow-hidden">
                 <div className="flex gap-1 px-3 pt-3 pb-2 border-b overflow-x-auto">
                   {EMOJI_CATEGORIES.map((cat, i) => (
                     <button key={i} onClick={() => setActiveCategoryIdx(i)}
