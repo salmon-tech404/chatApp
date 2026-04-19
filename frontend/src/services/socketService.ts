@@ -11,8 +11,13 @@ export const connectSocket = () => {
 
   if (!user || socket?.connected) return;
 
-  // Connect to current origin so requests go through the Vite proxy (works for both localhost and external tunnels)
-  socket = io(window.location.origin, {
+  const baseURL = import.meta.env.VITE_API_BASE_URL ?? "";
+  // Strip trailing /api to get the socket server origin
+  const socketURL = baseURL.endsWith("/api")
+    ? baseURL.slice(0, -4)
+    : window.location.origin;
+
+  socket = io(socketURL, {
     path: "/socket.io",
     query: {
       userId: user._id,
