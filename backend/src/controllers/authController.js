@@ -96,6 +96,12 @@ export const signIn = async (req, res) => {
         displayName: user.displayName,
         email: user.email,
         avatarUrl: user.avatarUrl,
+        coverPhotoUrl: user.coverPhotoUrl,
+        coverOffsetY: user.coverOffsetY ?? 50,
+        bio: user.bio,
+        gender: user.gender,
+        birthday: user.birthday,
+        phone: user.phone,
       },
     });
   } catch (error) {
