@@ -25,7 +25,7 @@ app.use(
     credentials: true,
   }),
 );
-const SERVER_PORT = process.env.SERVER_PORT;
+const SERVER_PORT = process.env.PORT || process.env.SERVER_PORT || 5000;
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 // middlewares
